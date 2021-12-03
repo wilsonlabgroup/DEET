@@ -1,11 +1,27 @@
 Package: DEET
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Differential Expression Enrichment Tool
+Authors@R: 
+  c(person(given = "Dustin",
+           family = "Sokolowski",
+           role = c("aut", "cre"),
+           email = "dustin.sokolowski@sickkids.ca"),
+    person(given = "Jedid",
+           family = "Ahn",
+           role = "aut"))
+Maintainer: Dustin Sokolowski <dustin.sokolowski@sickkids.ca>
+Description: A bioinformatics R package for comparing a list of human genes to 
+    published RNA-Seq studies containing similar differentially expressed genes.
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
 Encoding: UTF-8
 LazyData: true
+Depends: R (>= 3.5.0)
+biocViews:
+Imports: 
+    ActivePathways,
+    pbapply
+License: MIT + file LICENSE
+RoxygenNote: 7.1.2
+Roxygen: list(markdown = TRUE)
+URL: https://github.com/wilsonlabgroup/DEET
+BugReports: https://github.com/wilsonlabgroup/DEET/issues
