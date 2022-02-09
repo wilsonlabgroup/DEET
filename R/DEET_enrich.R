@@ -1,27 +1,32 @@
 #' @title DEET_enrich
 #'
 #' @description Core function of DEET where an input weighted human gene list
-#' will be queried to DEET’s library of studies.
+#' will be queried to DEETs library of studies.
 #'
 #' @param DEG_list Data frame or matrix of gene symbols with corresponding padj
 #' and log2FC values (3 columns in total). Can also be a character vector of
-#' gene symbols only.
+#' gene symbols only. colnames of genes: c("gene_symbol", "padj", "coef")
+#' The rownames of the dataframe are also the gene symbols.
 #' @param ordered Boolean value specifying whether DEG_list is a character
 #' vector of gene symbols that is ordered. Default value is FALSE.
 #' @param background Character vector of human gene symbols showing all
 #' possible genes. Default value is NULL.
+#' @param example_gmt Boolean value specifying whether we're using all of 
+#' data within the DEET database or whether we are using the example set 
+#' of 100 comparisons.
+#' 
 #'
 #' @return Named list where each element contains 6 objects. Each object will
 #' contain the results (enrichment or correlation) and corresponding metadata.
 #' \itemize{
 #'   \item AP_INPUT_BP_output - Enriched BPs of input gene list.
 #'   \item AP_INPUT_TF_output - Enriched TFs of input gene list.
-#'   \item AP_DEET_DE_output  - Enrichment of input gene list on DEET’s studies.
-#'   \item AP_DEET_BP_output  - Enrichment of BPs of input gene list on DEET’s
+#'   \item AP_DEET_DE_output  - Enrichment of input gene list on DEETs studies.
+#'   \item AP_DEET_BP_output  - Enrichment of BPs of input gene list on DEETs
 #'   BPs of studies.
-#'   \item AP_DEET_TF_output  - Enrichment of TFs of input gene list on DEET's
+#'   \item AP_DEET_TF_output  - Enrichment of TFs of input gene list on DEETs
 #'   TFs of studies.
-#'   \item DE_correlations    - Correlation values of input gene list to DEET’s
+#'   \item DE_correlations    - Correlation values of input gene list to DEETs
 #'   studies (both Pearson and Spearman).
 #' }
 #'
@@ -29,6 +34,8 @@
 #'
 #' @examples
 #' '\dontrun{
+#' 
+#' 
 #' GC_outrider_list <- readRDS("GC_outrider_outlier_gene_list.rds")
 #' GC_outrider_DEET <- list()
 #' background <- read.table("background_genes_202109.txt", header = F, as.is = T, sep = "\t")$V1
@@ -56,22 +63,22 @@
 #' @importFrom pbapply pblapply
 #' @importFrom stats cor.test p.adjust var
 #'
-DEET_enrich <- function(DEG_list, ordered = FALSE, background = NULL){
+DEET_enrich <- function(DEG_list, ordered = FALSE, background = NULL, example_gmt = FALSE){
   message(paste("Query start date and time:", Sys.time()))
 
   # Internal data loaded through sysdata.rda.
   # # 1) Start by loading the necessary files.
   # # a) DEET files.
-  # load("DEET_metadata.rda")  # DEET_metadata: DEET's metadata of studies.
-  # rownames(DEET_metadata) <- DEET_metadata$DEET.ID
-  # load("DEET_DE_final.rda")  # DEET_DE: DEET's DE of studies.
+   #load("DEET_metadata.rda")  # DEET_metadata: DEET's metadata of studies.
+   #rownames(DEET_metadata) <- DEET_metadata$DEET.ID
+   #load("DEET_DE_final.rda")  # DEET_DE: DEET's DE of studies.
   #
   # # b) ActivePathway (AP) files.
-  # gmt_BP <- ActivePathways::read.GMT("Human_GO_AllPathways_with_GO_iea_June_01_2021_symbol.gmt")
-  # gmt_TF <- ActivePathways::read.GMT("Human_TranscriptionFactors_MSigdb_June_01_2021_symbol.gmt")
-  # DEET_gmt_DE <- ActivePathways::read.GMT("DEET_DE.gmt")
-  # DEET_gmt_BP <- ActivePathways::read.GMT("DEET_BP.gmt")
-  # DEET_gmt_TF <- ActivePathways::read.GMT("DEET_TF.gmt")
+   #gmt_BP <- ActivePathways::read.GMT("Human_GO_AllPathways_with_GO_iea_June_01_2021_symbol.gmt")
+   #gmt_TF <- ActivePathways::read.GMT("Human_TranscriptionFactors_MSigdb_June_01_2021_symbol.gmt")
+   #DEET_gmt_DE <- ActivePathways::read.GMT("DEET_DE.gmt")
+   #DEET_gmt_BP <- ActivePathways::read.GMT("DEET_BP.gmt")
+   #DEET_gmt_TF <- ActivePathways::read.GMT("DEET_TF.gmt")
 
   # ============================================================================
 
@@ -138,6 +145,18 @@ DEET_enrich <- function(DEG_list, ordered = FALSE, background = NULL){
     if (!is.character(background)){
       stop("Background must be a character vector.")
     }
+  }
+  if(example_gmt) {
+    data("DEET_example_data")
+    DEET_DE <- DEET_example_data$DEET_DE
+    DEET_gmt_BP <- DEET_example_data$DEET_gmt_BP
+    DEET_gmt_TF <- DEET_example_data$DEET_gmt_TF
+    DEET_gmt_DE <- DEET_example_data$DEET_gmt_DE
+    DEET_metadata <- DEET_example_data$DEET_metadata
+    gmt_BP <- DEET_example_data$gmt_BP
+    gmt_TF <- DEET_example_data$gmt_TF
+    
+    
   }
 
   # ============================================================================
