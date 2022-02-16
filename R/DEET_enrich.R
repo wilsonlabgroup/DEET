@@ -14,6 +14,8 @@
 #' @param example_gmt Boolean value specifying whether we're using all of 
 #' data within the DEET database or whether we are using the example set 
 #' of 100 comparisons.
+#' @param local_Data String value giving directory where required 
+#' input files will be loaded.
 #' 
 #'
 #' @return Named list where each element contains 6 objects. Each object will
@@ -33,25 +35,10 @@
 #' @author Dustin Sokolowski, Jedid Ahn
 #'
 #' @examples
-#' '\dontrun{
 #' 
+#' data("example_DEET_enrich_input")
+#' example_out <- DEET_enrich(example_DEET_enrich_input, example_gmt = TRUE)
 #' 
-#' GC_outrider_list <- readRDS("GC_outrider_outlier_gene_list.rds")
-#' GC_outrider_DEET <- list()
-#' background <- read.table("background_genes_202109.txt", header = F, as.is = T, sep = "\t")$V1
-#' for(i in names(GC_outrider_list)){
-#'   # Preprocessing of input gene list.
-#'   DEG_list <- GC_outrider_list[[i]]
-#'   DEG_list <- DEG_list[ , c("genename", "pValue", "zScore")]
-#'   colnames(DEG_list) <- c("gene_symbol", "padj", "coef")
-#'   DEG_list$padj[DEG_list$padj > 0.049] <- 0.049
-#'   DEG_list <- DEG_list[!duplicated(DEG_list$gene_symbol), ]
-#'   rownames(DEG_list) <- DEG_list$gene_symbol
-#'
-#'   # Core function.
-#'   GC_outrider_DEET[[i]] <- DEET::DEET_enrich(DEG_list, background = background)
-#'   }
-#' }
 #'
 #' @references
 #' Paczkowska M, Barenboim J, Sintupisut N, et al. Integrative pathway
@@ -63,7 +50,7 @@
 #' @importFrom pbapply pblapply
 #' @importFrom stats cor.test p.adjust var
 #'
-DEET_enrich <- function(DEG_list, ordered = FALSE, background = NULL, example_gmt = FALSE){
+DEET_enrich <- function(DEG_list, ordered = FALSE, background = NULL, example_gmt = FALSE, localData = NULL){
   message(paste("Query start date and time:", Sys.time()))
 
   # Internal data loaded through sysdata.rda.
@@ -139,6 +126,7 @@ DEET_enrich <- function(DEG_list, ordered = FALSE, background = NULL, example_gm
       DEG_processed <- DEG_list
     }
   }
+  
 
   # Also check background input.
   if (!is.null(background)){
@@ -157,12 +145,42 @@ DEET_enrich <- function(DEG_list, ordered = FALSE, background = NULL, example_gm
     gmt_TF <- DEET_example_data$gmt_TF
     
     
+  } else {
+    if(is.null(localData)) {
+      message("Data for DEET is not in local directory.")
+      warning("Data for DEET is not in local directory.")
+      confirm <- readline("Enter YES to approve of a >200Mb download. ")
+      if(toupper(confirm) == "YES") {
+        message("Downloading DEET to temporary file.")
+        warning("Downloading DEET to temporary file, we reccomend downloading the data from.")
+        # paste the directory when available.
+        
+      } else {
+        message(paste0("Downloaded DEET data is at: ", localData))
+        load(paste0(localData,"DEET_metadata.rda"))  # DEET_metadata: DEET's metadata of studies.
+        rownames(DEET_metadata) <- DEET_metadata$DEET.ID
+        load(paste0(localData,"DEET_DE_final.rda"))  # DEET_DE: DEET's DE of studies.
+        #
+        # # b) ActivePathway (AP) files.
+        gmt_BP <- ActivePathways::read.GMT(paste0(localData,"Human_GO_AllPathways_with_GO_iea_June_01_2021_symbol.gmt"))
+        gmt_TF <- ActivePathways::read.GMT(paste0(localData,"Human_TranscriptionFactors_MSigdb_June_01_2021_symbol.gmt"))
+        DEET_gmt_DE <- ActivePathways::read.GMT(paste0(localData,"DEET_DE.gmt"))
+        DEET_gmt_BP <- ActivePathways::read.GMT(paste0(localData,"DEET_BP.gmt"))
+        DEET_gmt_TF <- ActivePathways::read.GMT(paste0(localData,"DEET_TF.gmt"))
+      }
+    }
   }
 
   # ============================================================================
 
   # Enrichment algorithms starts here.
+  
+  DEG_processed <- DEG_processed[!duplicated(DEG_processed[,1]),]
+  rownames(DEG_processed) <- DEG_processed[,1]
   comp <- as.matrix(DEG_processed[ , "padj"])
+  
+  
+  
   rownames(comp) <- toupper(rownames(DEG_processed))
 
   # 1) Find enriched BPs of input gene list.
