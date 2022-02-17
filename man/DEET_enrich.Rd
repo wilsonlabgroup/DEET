@@ -4,18 +4,32 @@
 \alias{DEET_enrich}
 \title{DEET_enrich}
 \usage{
-DEET_enrich(DEG_list, ordered = FALSE, background = NULL)
+DEET_enrich(
+  DEG_list,
+  ordered = FALSE,
+  background = NULL,
+  example_gmt = FALSE,
+  localData = NULL
+)
 }
 \arguments{
 \item{DEG_list}{Data frame or matrix of gene symbols with corresponding padj
 and log2FC values (3 columns in total). Can also be a character vector of
-gene symbols only.}
+gene symbols only. colnames of genes: c("gene_symbol", "padj", "coef")
+The rownames of the dataframe are also the gene symbols.}
 
 \item{ordered}{Boolean value specifying whether DEG_list is a character
 vector of gene symbols that is ordered. Default value is FALSE.}
 
 \item{background}{Character vector of human gene symbols showing all
 possible genes. Default value is NULL.}
+
+\item{example_gmt}{Boolean value specifying whether we're using all of
+data within the DEET database or whether we are using the example set
+of 100 comparisons.}
+
+\item{local_Data}{String value giving directory where required
+input files will be loaded.}
 }
 \value{
 Named list where each element contains 6 objects. Each object will
@@ -23,18 +37,25 @@ contain the results (enrichment or correlation) and corresponding metadata.
 \itemize{
 \item AP_INPUT_BP_output - Enriched BPs of input gene list.
 \item AP_INPUT_TF_output - Enriched TFs of input gene list.
-\item AP_DEET_DE_output  - Enrichment of input gene list on DEET’s studies.
-\item AP_DEET_BP_output  - Enrichment of BPs of input gene list on DEET’s
+\item AP_DEET_DE_output  - Enrichment of input gene list on DEETs studies.
+\item AP_DEET_BP_output  - Enrichment of BPs of input gene list on DEETs
 BPs of studies.
-\item AP_DEET_TF_output  - Enrichment of TFs of input gene list on DEET's
+\item AP_DEET_TF_output  - Enrichment of TFs of input gene list on DEETs
 TFs of studies.
-\item DE_correlations    - Correlation values of input gene list to DEET’s
+\item DE_correlations    - Correlation values of input gene list to DEETs
 studies (both Pearson and Spearman).
 }
 }
 \description{
 Core function of DEET where an input weighted human gene list
-will be queried to DEET’s library of studies.
+will be queried to DEETs library of studies.
+}
+\examples{
+
+data("example_DEET_enrich_input")
+example_out <- DEET_enrich(example_DEET_enrich_input, example_gmt = TRUE)
+
+
 }
 \references{
 Paczkowska M, Barenboim J, Sintupisut N, et al. Integrative pathway
