@@ -25,8 +25,8 @@
 #'
 #' @examples
 #' 
-#' data("DEET_feature_extract_example_matrix")
-#' data("DEET_feature_extract_example_response)
+#' data(DEET_feature_extract_example_matrix)
+#' data(DEET_feature_extract_example_response)
 #' single1 <- DEET_feature_extract(DEET_feature_extract_example_matrix,DEET_feature_extract_example_response,"categorical")
 #'
 #' @references
@@ -51,7 +51,8 @@ process_plotdata <- function(plotdata, exclude_domain="", testclusters=""){
     dplyr::mutate(order = dplyr::row_number())
   return(plotdata)
 }
-plot_cluster_enrichment <- function(enrich_list, outname, width=8, text_angle=0, horizontal =F, topn=5, ol_size=1, exclude_domain="", cluster_order=NULL, dot=F, colors = "Set2"){
+
+DEET_enrichment_barplot <- function(enrich_list, outname, width=8, text_angle=0, horizontal =F, topn=5, ol_size=1, exclude_domain="", cluster_order=NULL, dot=F, colors = "Set2"){
   testclusters <- names(enrich_list[sapply(enrich_list, nrow) >0])
   enrich_data_list <- lapply(testclusters, function(x){
     print(x)
