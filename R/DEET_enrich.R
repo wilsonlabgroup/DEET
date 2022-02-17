@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #' @title DEET_enrich
 #'
 #' @description Core function of DEET where an input weighted human gene list
@@ -12,12 +11,12 @@
 #' vector of gene symbols that is ordered. Default value is FALSE.
 #' @param background Character vector of human gene symbols showing all
 #' possible genes. Default value is NULL.
-#' @param example_gmt Boolean value specifying whether we're using all of 
-#' data within the DEET database or whether we are using the example set 
+#' @param example_gmt Boolean value specifying whether we're using all of
+#' data within the DEET database or whether we are using the example set
 #' of 100 comparisons.
-#' @param local_Data String value giving directory where required 
+#' @param local_Data String value giving directory where required
 #' input files will be loaded.
-#' 
+#'
 #'
 #' @return Named list where each element contains 6 objects. Each object will
 #' contain the results (enrichment or correlation) and corresponding metadata.
@@ -36,10 +35,10 @@
 #' @author Dustin Sokolowski, Jedid Ahn
 #'
 #' @examples
-#' 
+#'
 #' data("example_DEET_enrich_input")
 #' example_out <- DEET_enrich(example_DEET_enrich_input, example_gmt = TRUE)
-#' 
+#'
 #'
 #' @references
 #' Paczkowska M, Barenboim J, Sintupisut N, et al. Integrative pathway
@@ -127,7 +126,7 @@ DEET_enrich <- function(DEG_list, ordered = FALSE, background = NULL, example_gm
       DEG_processed <- DEG_list
     }
   }
-  
+
 
   # Also check background input.
   if (!is.null(background)){
@@ -144,8 +143,8 @@ DEET_enrich <- function(DEG_list, ordered = FALSE, background = NULL, example_gm
     DEET_metadata <- DEET_example_data$DEET_metadata
     gmt_BP <- DEET_example_data$gmt_BP
     gmt_TF <- DEET_example_data$gmt_TF
-    
-    
+
+
   } else {
     if(is.null(localData)) {
       message("Data for DEET is not in local directory.")
@@ -155,7 +154,7 @@ DEET_enrich <- function(DEG_list, ordered = FALSE, background = NULL, example_gm
         message("Downloading DEET to temporary file.")
         warning("Downloading DEET to temporary file, we reccomend downloading the data from.")
         # paste the directory when available.
-        
+
       } else {
         message(paste0("Downloaded DEET data is at: ", localData))
         load(paste0(localData,"DEET_metadata.rda"))  # DEET_metadata: DEET's metadata of studies.
@@ -175,13 +174,13 @@ DEET_enrich <- function(DEG_list, ordered = FALSE, background = NULL, example_gm
   # ============================================================================
 
   # Enrichment algorithms starts here.
-  
+
   DEG_processed <- DEG_processed[!duplicated(DEG_processed[,1]),]
   rownames(DEG_processed) <- DEG_processed[,1]
   comp <- as.matrix(DEG_processed[ , "padj"])
-  
-  
-  
+
+
+
   rownames(comp) <- toupper(rownames(DEG_processed))
 
   # 1) Find enriched BPs of input gene list.
@@ -515,12 +514,12 @@ single_gene_set_cor_test <- function(index, DEG_processed, DEET_DE,
 #' vector of gene symbols that is ordered. Default value is FALSE.
 #' @param background Character vector of human gene symbols showing all
 #' possible genes. Default value is NULL.
-#' @param example_gmt Boolean value specifying whether we're using all of 
-#' data within the DEET database or whether we are using the example set 
+#' @param example_gmt Boolean value specifying whether we're using all of
+#' data within the DEET database or whether we are using the example set
 #' of 100 comparisons.
-#' @param local_Data String value giving directory where required 
+#' @param local_Data String value giving directory where required
 #' input files will be loaded.
-#' 
+#'
 #'
 #' @return Named list where each element contains 6 objects. Each object will
 #' contain the results (enrichment or correlation) and corresponding metadata.
@@ -539,10 +538,10 @@ single_gene_set_cor_test <- function(index, DEG_processed, DEET_DE,
 #' @author Dustin Sokolowski, Jedid Ahn
 #'
 #' @examples
-#' 
+#'
 #' data("example_DEET_enrich_input")
 #' example_out <- DEET_enrich(example_DEET_enrich_input, example_gmt = TRUE)
-#' 
+#'
 #'
 #' @references
 #' Paczkowska M, Barenboim J, Sintupisut N, et al. Integrative pathway
@@ -630,7 +629,7 @@ DEET_enrich <- function(DEG_list, ordered = FALSE, background = NULL, example_gm
       DEG_processed <- DEG_list
     }
   }
-  
+
 
   # Also check background input.
   if (!is.null(background)){
@@ -647,8 +646,8 @@ DEET_enrich <- function(DEG_list, ordered = FALSE, background = NULL, example_gm
     DEET_metadata <- DEET_example_data$DEET_metadata
     gmt_BP <- DEET_example_data$gmt_BP
     gmt_TF <- DEET_example_data$gmt_TF
-    
-    
+
+
   } else {
     if(is.null(localData)) {
       message("Data for DEET is not in local directory.")
@@ -658,7 +657,7 @@ DEET_enrich <- function(DEG_list, ordered = FALSE, background = NULL, example_gm
         message("Downloading DEET to temporary file.")
         warning("Downloading DEET to temporary file, we reccomend downloading the data from.")
         # paste the directory when available.
-        
+
       } else {
         message(paste0("Downloaded DEET data is at: ", localData))
         load(paste0(localData,"DEET_metadata.rda"))  # DEET_metadata: DEET's metadata of studies.
@@ -678,13 +677,13 @@ DEET_enrich <- function(DEG_list, ordered = FALSE, background = NULL, example_gm
   # ============================================================================
 
   # Enrichment algorithms starts here.
-  
+
   DEG_processed <- DEG_processed[!duplicated(DEG_processed[,1]),]
   rownames(DEG_processed) <- DEG_processed[,1]
   comp <- as.matrix(DEG_processed[ , "padj"])
-  
-  
-  
+
+
+
   rownames(comp) <- toupper(rownames(DEG_processed))
 
   # 1) Find enriched BPs of input gene list.

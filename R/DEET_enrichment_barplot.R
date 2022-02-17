@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #' @title DEET_cluster_enrichment
 #'
 #' @description Generate barplots or dotplots from the output of DEET
@@ -15,17 +14,17 @@
 #'  the user happened to aggregate the results into a single DF, generally unused.
 #' @param cluster_order Factor to group studies based on the researchers custom annotation.
 #' @param dot logical (T/F) of whether to produce a dotplot or a barplot
-#' @param colors Type of color pallete to input into 'scale_fill_brewer' of ggplot.    
-#' 
+#' @param colors Type of color pallete to input into 'scale_fill_brewer' of ggplot.
+#'
 #'
 #'
 #' @return A ggplot2 object (barplot or dotplot) of enrichment identified within DEET.
-#' 
+#'
 
 #' @author Dustin Sokolowski, Hauyun Hou PhD
 #'
 #' @examples
-#' 
+#'
 #' data(DEET_feature_extract_example_matrix)
 #' data(DEET_feature_extract_example_response)
 #' single1 <- DEET_feature_extract(DEET_feature_extract_example_matrix,DEET_feature_extract_example_response,"categorical")
@@ -36,7 +35,7 @@
 #' @importFrom dplyr arrange desc mutate row_number
 #' @importFrom ggplot2 ggplot geom_bar aes geom_text coord_flip theme_bw theme element_text scale_x_continuous scale_fill_brewer facet_grid theme geom_point
 #' @importFrom stats na.omit
-#' 
+#'
 count_intersection <- function(x){
   return(length(unlist(strsplit(x, ","))))
 }
@@ -125,7 +124,7 @@ DEET_enrichment_barplot <- function(enrich_list, outname, width=8, text_angle=0,
   #print(p)
   #dev.off()
   return(p)
-} 
+}
 =======
 #' @title DEET_cluster_enrichment
 #'
@@ -143,17 +142,17 @@ DEET_enrichment_barplot <- function(enrich_list, outname, width=8, text_angle=0,
 #'  the user happened to aggregate the results into a single DF, generally unused.
 #' @param cluster_order Factor to group studies based on the researchers custom annotation.
 #' @param dot logical (T/F) of whether to produce a dotplot or a barplot
-#' @param colors Type of color pallete to input into 'scale_fill_brewer' of ggplot.    
-#' 
+#' @param colors Type of color pallete to input into 'scale_fill_brewer' of ggplot.
+#'
 #'
 #'
 #' @return A ggplot2 object (barplot or dotplot) of enrichment identified within DEET.
-#' 
+#'
 
 #' @author Dustin Sokolowski, Hauyun Hou PhD
 #'
 #' @examples
-#' 
+#'
 #' data(DEET_feature_extract_example_matrix)
 #' data(DEET_feature_extract_example_response)
 #' single1 <- DEET_feature_extract(DEET_feature_extract_example_matrix,DEET_feature_extract_example_response,"categorical")
@@ -164,7 +163,7 @@ DEET_enrichment_barplot <- function(enrich_list, outname, width=8, text_angle=0,
 #' @importFrom dplyr arrange desc mutate row_number
 #' @importFrom ggplot2 ggplot geom_bar aes geom_text coord_flip theme_bw theme element_text scale_x_continuous scale_fill_brewer facet_grid theme geom_point
 #' @importFrom stats na.omit
-#' 
+#'
 count_intersection <- function(x){
   return(length(unlist(strsplit(x, ","))))
 }
@@ -253,5 +252,5 @@ DEET_enrichment_barplot <- function(enrich_list, outname, width=8, text_angle=0,
   #print(p)
   #dev.off()
   return(p)
-} 
+}
 >>>>>>> c3f90551151c245d86cb4e93e8a985a49007ab8e
