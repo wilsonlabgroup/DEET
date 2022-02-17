@@ -31,15 +31,15 @@
 #'
 #' @examples
 #' 
-#' data("DEET_feature_extract_example_matrix")
-#' data("DEET_feature_extract_example_response)
+#' data(DEET_feature_extract_example_matrix)
+#' data(DEET_feature_extract_example_response)
 #' single1 <- DEET_feature_extract(DEET_feature_extract_example_matrix,DEET_feature_extract_example_response,"categorical")
 #'
 #' @references
 #'
 #' @export
-#' @importFrom glmnet glmnet
-#' @importFrom stats cor.test p.adjust aov complete.cases wilcox.test coef.glmnet
+#' @importFrom glmnet glmnet coef.glmnet
+#' @importFrom stats cor.test p.adjust aov complete.cases wilcox.test
 #'
 DEET_feature_extract <- function(mat, response, dataype) {
 
@@ -160,17 +160,3 @@ if(class( tst1_coef)== "list") { # This will be for binomial or gaussian methods
 return(outlist) 
 }
 
-a=Sys.time()
-mat1 <- mat1[,response1 != "SRA-manual"]
-response1 <- response1[response1 != "SRA-manual"]
-
-mat1 <- mat
-response1 <- response
-single1 <- DEET_feature_extract(DEET_feature_extract_example_matrix,DEET_feature_extract_example_response,"categorical")
-
-b=Sys.time()
-
-# Returns:
-  # elastic_net_coefficients: the coefficients of each gene associated with each piece of metadata
-  # elastic net: the actual model that was built
-  # basic_features: A correlation, anova, or wilcoxon test to associate genes (depending on the response variables' datatype.)
