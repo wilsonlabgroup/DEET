@@ -67,9 +67,8 @@ the DEET_enrich function.
 \examples{
 
 data("example_DEET_enrich_input")
-DEET_output <- example_out
-DEET_output <- DEET_output[names(DEET_output) != "DE_correlations"]
-plotting_example <- proccess_and_plot_DEET_enrich(example_out, text_angle = 45, horizontal = TRUE, topn=4)
+DEET_out <- DEET_enrich(example_DEET_enrich_input, example_gmt = TRUE)
+plotting_example <- proccess_and_plot_DEET_enrich(DEET_out, text_angle = 45, horizontal = TRUE, topn=4)
 
 }
 \references{

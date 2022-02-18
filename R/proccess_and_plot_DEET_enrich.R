@@ -41,9 +41,8 @@
 #' @examples
 #'
 #' data("example_DEET_enrich_input")
-#' DEET_output <- example_out
-#' DEET_output <- DEET_output[names(DEET_output) != "DE_correlations"]
-#' plotting_example <- proccess_and_plot_DEET_enrich(example_out, text_angle = 45, horizontal = TRUE, topn=4)
+#' DEET_out <- DEET_enrich(example_DEET_enrich_input, example_gmt = TRUE)
+#' plotting_example <- proccess_and_plot_DEET_enrich(DEET_out, text_angle = 45, horizontal = TRUE, topn=4)
 #'
 #' @references
 #'
@@ -90,7 +89,10 @@ for(i in names(DEET_plot_processed)) {
 message("Genarating barplot of pathway enrichment (BP + TF) if available")
 if(length(grep("INPUT", names(DEET_plot_processed))) == 2) {
   Traditional_Barplot <- DEET_enrichment_plot(DEET_plot_processed[grep("INPUT", names(DEET_plot_processed))], "Pathway_Enrichment", width=width, text_angle=text_angle, horizontal =horizontal, topn=topn, ol_size = ol_size, exclude_domain = exclude_domain, cluster_order=cluster_order, dot=dot, colors = colors)
+} else {
+  Traditional_Barplot <- "There was not significant enrichment of at least one gene set from both BPs or TFs, please see individual_barplot for results."
 }
+
 message("Genarating barplot of DEET enrichment (DE + BP + TF) if available")
 if(length(grep("_DEET_", names(DEET_plot_processed))) > 1) {
   tmp <- DEET_plot_processed[grep("_DEET_", names(DEET_plot_processed))]
@@ -100,9 +102,11 @@ if(length(grep("_DEET_", names(DEET_plot_processed))) > 1) {
     tmp[[i]] <- tmp1
   }
   DEET_DotPlot <- DEET_enrichment_plot(tmp, "DEET_Enrichment", width=width, text_angle=text_angle, horizontal =TRUE, topn=topn, ol_size = ol_size, exclude_domain = exclude_domain, cluster_order=cluster_order, dot=TRUE, colors = colors)
+} else {
+  DEET_DotPlot <- "There was only enrichment of the DEET database from only on level (DE, BP, or TF). See result in 'individual_barplot`."
 }
 
-return(list(DEET_DotPlot = DEET_DotPlot, Pathway_barplot = Pathway_barplot, individual_barplot = each_barplot, DEET_output_forplotting = DEET_plot_processed))
+return(list(DEET_DotPlot = DEET_DotPlot, Pathway_barplot = Traditional_Barplot, individual_barplot = each_barplot, DEET_output_forplotting = DEET_plot_processed))
 
 }
 

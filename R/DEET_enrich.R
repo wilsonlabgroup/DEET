@@ -37,7 +37,7 @@
 #' @examples
 #'
 #' data("example_DEET_enrich_input")
-#' example_out <- DEET_enrich(example_DEET_enrich_input, example_gmt = TRUE)
+#' DEET_out <- DEET_enrich(example_DEET_enrich_input, example_gmt = TRUE)
 #'
 #'
 #' @references
