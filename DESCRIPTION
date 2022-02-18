@@ -19,7 +19,10 @@ Depends: R (>= 3.5.0)
 biocViews:
 Imports: 
     ActivePathways,
-    pbapply
+    pbapply,
+	dplyr,
+	ggplot2,
+	glmnet
 License: MIT + file LICENSE
 RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)
