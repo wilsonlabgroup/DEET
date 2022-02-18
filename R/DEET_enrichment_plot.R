@@ -1,4 +1,4 @@
-#' @title DEET_cluster_enrichment
+#' @title DEET_enrichment_plot
 #'
 #' @description Generate barplots or dotplots from the output of DEET
 #'
@@ -32,7 +32,7 @@
 #' @references
 #'
 #' @export
-#' @importFrom dplyr arrange desc mutate row_number
+#' @importFrom dplyr arrange desc mutate row_number %>%
 #' @importFrom ggplot2 ggplot geom_bar aes geom_text coord_flip theme_bw theme element_text scale_x_continuous scale_fill_brewer facet_grid theme geom_point
 #' @importFrom stats na.omit
 #'
@@ -52,7 +52,7 @@ process_plotdata <- function(plotdata, exclude_domain="", testclusters=""){
   return(plotdata)
 }
 
-DEET_enrichment_barplot <- function(enrich_list, outname, width=8, text_angle=0, horizontal =F, topn=5, ol_size=1, exclude_domain="", cluster_order=NULL, dot=F, colors = "Set2"){
+DEET_enrichment_plot <- function(enrich_list, outname, width=8, text_angle=0, horizontal =F, topn=5, ol_size=1, exclude_domain="", cluster_order=NULL, dot=F, colors = "Set2"){
   testclusters <- names(enrich_list[sapply(enrich_list, nrow) >0])
   enrich_data_list <- lapply(testclusters, function(x){
     print(x)

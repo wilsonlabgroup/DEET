@@ -22,7 +22,7 @@
 #'   \item elastic_net_coefficients - Association that a gene has with the
 #'   response variable based on the elastic net regression.
 #'   \item elastic_net - Output of the elastic net regression
-#'   \basicfeatures - basic_features gives the output of the
+#'   \item - basic_features gives the output of the
 #'   correlation, ANOVA, and wilcoxon test of every gene against the
 #'   response variable.
 #' }
