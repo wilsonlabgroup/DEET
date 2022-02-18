@@ -17,12 +17,15 @@ Encoding: UTF-8
 LazyData: true
 Depends: R (>= 3.5.0)
 biocViews:
+License: GPL-3
 Imports: 
     ActivePathways,
     pbapply,
 	dplyr,
 	ggplot2,
-	glmnet
+	glmnet,
+	utils,
+	stats
 License: MIT + file LICENSE
 RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)
