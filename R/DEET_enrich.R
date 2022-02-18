@@ -51,7 +51,7 @@
 #' @importFrom stats cor.test p.adjust var
 #'
 DEET_enrich <- function(DEG_list, ordered = FALSE, background = NULL, example_gmt = FALSE, localData = NULL){
-  message(paste("Query start date and time:", Sys.time()))
+
 
   # Internal data loaded through sysdata.rda.
   # # 1) Start by loading the necessary files.

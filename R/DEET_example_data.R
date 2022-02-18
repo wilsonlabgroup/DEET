@@ -1,0 +1,31 @@
+#' DEET_example_data
+#'
+#' Named list of gene-sets and representative metadata for studies associated with Alizada et al., 2021
+#' This example data is the exact same as what is needed to run DEET enrich properly but
+#' subsetted to have 13 studies that are enriched by `example_DEET_enrich_input`.
+#' This way, the example gives an output at all levels of enrichment and at the correlation level.
+#'
+#'
+#' @rdname DEET_example_data
+#' @name DEET_example_data
+#'
+#' @usage data(DEET_example_data)
+#'
+#' @format A named list of seven objects containing the data frames summarizing the DEGs from comparisons within DEET,
+#' GMT objects of comparisons within DEET for enrichment through ActivePathways, GMT objects for basic pathway and TF enrichment,
+#' and a dataframe for the metadata of each study.
+#'
+#' #' \describe{
+#'   \item{DEET_DE}{ A list of data frames containing the significant DE genes, mean expression, log2fold-change, and padj from DESeq (padj < 0.05).}
+#'   \item{DEET_gmt_BP}{ A list of class GMT, which is a list of studies where each study is populated by comparison id (internal DEET identifier), comparison name (interpretable comparison name), and a gene set. In this case the gene-set is the pathways that are enriched within that study.}
+#'   \item{DEET_gmt_TF}{ A list of class GMT, which is a list of studies where each study is populated by comparison id (internal DEET identifier), comparison name (interpretable comparison name), and a gene set. In this case the gene-set is the TFs that are enriched within that study.}
+#'   \item{DEET_gmt_DE}{ A list of class GMT, which is a list of studies where each study is populated by comparison id (internal DEET identifier), comparison name (interpretable comparison name), and a gene set. In this case the gene-set is the DEGs that are enriched within that study.}
+#'   \item{gmt_BP}{ Kupffer markers identified by panglao}
+#'   \item{DEET_metadata}{ For every pairwise comparison, the study name, source (SRA, TCGA, GTEx and SRA-manual), description from the DRA compendium, the number of samples (total, up-condition, and down-condition), samples (total ,up-condition, down-condition), tissue (including tumour from TCGA), number of DEs (total, up-condition, down-condition), age (mean +- sd), sex, top 15 DEGs - up, top 15 DEGs - down, top 5 enriched pathways, and top 5 enriched TFs. PMID are also available for studies selected from SRA. Lastly, each pairwise comparison was given an overall category based on those decided in Crow et al., 2019. }
+#' }
+#'
+#' @examples
+#' data(DEET_example_data)
+#' @keywords datasets
+#'
+NULL
