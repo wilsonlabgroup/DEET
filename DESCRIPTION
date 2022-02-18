@@ -26,7 +26,6 @@ Imports:
 	glmnet,
 	utils,
 	stats
-License: MIT + file LICENSE
 RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)
 URL: https://github.com/wilsonlabgroup/DEET
