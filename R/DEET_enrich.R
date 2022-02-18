@@ -350,7 +350,7 @@ DEET_enrich <- function(DEG_list, ordered = FALSE, background = NULL, example_gm
   # Generate function output elements by matching metadata to results.
 
   # 3) AP_DEET_DE_output
-  if (class(AP_DEET_DE_sig) == "data.table" && nrow(AP_DEET_DE_sig) > 0){
+  if ((( "data.table" %in% class(AP_DEET_DE_sig))[1]  & nrow(AP_DEET_DE_sig) > 0)[1]){
     meta_match <- DEET_metadata[AP_DEET_DE_sig$term.id, ]
 
     AP_DEET_DE_output <- list(results = AP_DEET_DE_sig,
