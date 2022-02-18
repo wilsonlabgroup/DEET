@@ -70,6 +70,67 @@ DEET_enrich <- function(DEG_list, ordered = FALSE, background = NULL, example_gm
 
   # ============================================================================
 
+  # Internal function to run correlations
+  single_gene_set_cor_test <- function(index, DEG_processed, DEET_DE,
+                                       AP_DEET_DE_sig, DEET_metadata){
+    # Get comparison in DEET.
+    comp <- DEET_DE[[index]]
+    DEET_comp_id <- DEET_metadata$DEET.ID[index]
+    DEET_comp_name <- DEET_metadata$DEET.Name[index]
+
+    # Get genes DE in either study.
+    genes <- unique(c(rownames(DEG_processed), rownames(comp)))
+    genes_cor <- AP_DEET_DE_sig$overlap[[index]]
+
+    # Build matrix of fold-changes of genes in either study.
+    mat <- as.data.frame(matrix(0, nrow = length(genes_cor), ncol = 2))
+    colnames(mat) <- c("input", "DEET")
+    rownames(mat) <- genes_cor
+
+    # Populate input fold-change.
+    mat$input <- DEG_processed[DEG_processed$gene_symbol %in% genes_cor, ]$coef
+
+    # Populate DEET fold-change.
+    mat$DEET <- comp[genes_cor, ]$log2FoldChange
+
+
+    # Perform Pearson correlation.
+    pearson_cor <-  cor.test(mat[, 1],mat[, 2], method = "pearson")
+    Pear <- pearson_cor$estimate[[1]]
+    P_Pear <- pearson_cor$p.value[[1]]
+
+    # Perform Spearman correlation.
+    spearman_cor <-  cor.test(mat[, 1],mat[, 2], method = "spearman")
+    Spear <- spearman_cor$estimate[[1]]
+    P_Spear <- spearman_cor$p.value[[1]]
+
+    # Get overlapping DEGs in study.
+    mat <- as.data.frame(matrix(0, nrow = length(genes), ncol = 2))
+    colnames(mat) <- c("input", "DEET")
+    rownames(mat) <- genes
+
+    # Populate input fold-change
+    mat[DEG_processed$gene_symbol, "input"] <- DEG_processed$coef
+    # Populate DEET fold-change
+    mat[rownames(comp), "DEET"] <- comp$log2FoldChange
+
+    col <- rep("grey", nrow(mat))
+    col[(mat[,1] > 0 & mat[,2] > 0) | (mat[,1] < 0 & mat[,2] < 0) ] <- "purple"
+    col[(mat[,1] < 0 & mat[,2] > 0) | (mat[,1] > 0 & mat[,2] < 0) ] <- "orange"
+    mat$color <- col
+
+    sameDir <- length(mat$color == "purple")
+    oppositeDir <- length(mat$color == "purple")
+    genes <- rownames(mat)[mat$color != "grey"]
+
+    summary_cor <- c(DEET_comp_id, DEET_comp_name, Pear, P_Pear, Spear, P_Spear)
+    names(summary_cor) <- c("DEET.ID", "DEET.Name", "Pear", "P_Pear",
+                            "Spear", "P_Spear")
+
+    l <- list(summary_cor = summary_cor, matrix = mat)
+    return (l)
+  }
+
   # Official code starts here.
   if(!(is.data.frame(DEG_list) | is.matrix(DEG_list) | is.character(DEG_list))){
     stop("Input DEG list must be of class data.frame, matrix, or character.")
@@ -362,7 +423,7 @@ DEET_enrich <- function(DEG_list, ordered = FALSE, background = NULL, example_gm
   }
 
   # 4) AP_DEET_BP_output
-  if (class(AP_DEET_BP_sig) == "data.table" && nrow(AP_DEET_BP_sig) > 0){
+  if ((( "data.table" %in% class(AP_DEET_BP_sig))[1]  & nrow(AP_DEET_BP_sig) > 0)[1]){
     meta_match <- DEET_metadata[AP_DEET_BP_sig$term.id, ]
 
     AP_DEET_BP_output <- list(results = AP_DEET_BP_sig,
@@ -374,7 +435,8 @@ DEET_enrich <- function(DEG_list, ordered = FALSE, background = NULL, example_gm
   }
 
   # 5) AP_DEET_TF_output
-  if (class(AP_DEET_TF_sig) == "data.table" && nrow(AP_DEET_TF_sig) > 0){
+  if ((( "data.table" %in% class(AP_DEET_TF_sig))[1]  & nrow(AP_DEET_TF_sig) > 0)[1]){
+
     meta_match <- DEET_metadata[AP_DEET_TF_sig$term.id, ]
 
     AP_DEET_TF_output <- list(results = AP_DEET_TF_sig,
@@ -416,89 +478,6 @@ DEET_enrich <- function(DEG_list, ordered = FALSE, background = NULL, example_gm
 }
 
 
-#' @title single_gene_set_cor_test
-#'
-#' @description Calculate the Pearson and Spearman correlation between the
-#' input DEGs and an individual set of DEGs from DEET.
-#'
-#' @param index Value between 1 and length(DEET_DE).
-#' @param DEG_processed Processed data frame consisting of the input genes.
-#' The 3 columns are gene_symbol, padj, and coef.
-#' @param DEET_DE List containing DEET's DE and library of studies. This
-#' contains a subset of studies with 3 or more overlapping DEGs.
-#' @param AP_DEET_DE_sig Data frame consisting of the enrichment of input gene
-#' list on DEET’s studies. This contains a subset of studies with 3 or more
-#' overlapping DEGs.
-#' @param DEET_metadata Corresponding metadata of studies in DEET. This
-#' contains a subset of studies with 3 or more overlapping DEGs.
-#'
-#' @return A list containing 2 objects.
-#' \itemize{
-#'   \item summary_cor - Summary of the correlations.
-#'   \item matrix - Scatterplot of genes that are DE in the study.
-#' }
-#'
-#' @author Dustin Sokolowski, Jedid Ahn
-#'
-single_gene_set_cor_test <- function(index, DEG_processed, DEET_DE,
-                                     AP_DEET_DE_sig, DEET_metadata){
-  # Get comparison in DEET.
-  comp <- DEET_DE[[index]]
-  DEET_comp_id <- DEET_metadata$DEET.ID[index]
-  DEET_comp_name <- DEET_metadata$DEET.Name[index]
-
-  # Get genes DE in either study.
-  genes <- unique(c(rownames(DEG_processed), rownames(comp)))
-  genes_cor <- AP_DEET_DE_sig$overlap[[index]]
-
-  # Build matrix of fold-changes of genes in either study.
-  mat <- as.data.frame(matrix(0, nrow = length(genes_cor), ncol = 2))
-  colnames(mat) <- c("input", "DEET")
-  rownames(mat) <- genes_cor
-
-  # Populate input fold-change.
-  mat$input <- DEG_processed[DEG_processed$gene_symbol %in% genes_cor, ]$coef
-
-  # Populate DEET fold-change.
-  mat$DEET <- comp[genes_cor, ]$log2FoldChange
-
-
-  # Perform Pearson correlation.
-  pearson_cor <-  cor.test(mat[, 1],mat[, 2], method = "pearson")
-  Pear <- pearson_cor$estimate[[1]]
-  P_Pear <- pearson_cor$p.value[[1]]
-
-  # Perform Spearman correlation.
-  spearman_cor <-  cor.test(mat[, 1],mat[, 2], method = "spearman")
-  Spear <- spearman_cor$estimate[[1]]
-  P_Spear <- spearman_cor$p.value[[1]]
-
-  # Get overlapping DEGs in study.
-  mat <- as.data.frame(matrix(0, nrow = length(genes), ncol = 2))
-  colnames(mat) <- c("input", "DEET")
-  rownames(mat) <- genes
-
-  # Populate input fold-change
-  mat[DEG_processed$gene_symbol, "input"] <- DEG_processed$coef
-  # Populate DEET fold-change
-  mat[rownames(comp), "DEET"] <- comp$log2FoldChange
-
-  col <- rep("grey", nrow(mat))
-  col[(mat[,1] > 0 & mat[,2] > 0) | (mat[,1] < 0 & mat[,2] < 0) ] <- "purple"
-  col[(mat[,1] < 0 & mat[,2] > 0) | (mat[,1] > 0 & mat[,2] < 0) ] <- "orange"
-  mat$color <- col
-
-  sameDir <- length(mat$color == "purple")
-  oppositeDir <- length(mat$color == "purple")
-  genes <- rownames(mat)[mat$color != "grey"]
-
-  summary_cor <- c(DEET_comp_id, DEET_comp_name, Pear, P_Pear, Spear, P_Spear)
-  names(summary_cor) <- c("DEET.ID", "DEET.Name", "Pear", "P_Pear",
-                          "Spear", "P_Spear")
-
-  l <- list(summary_cor = summary_cor, matrix = mat)
-  return (l)
-}
 
 # [END]
 
