@@ -14,7 +14,7 @@
 #' @param example_gmt Boolean value specifying whether we're using all of
 #' data within the DEET database or whether we are using the example set
 #' of 100 comparisons.
-#' @param local_Data String value giving directory where required
+#' @param localData String value giving directory where required
 #' input files will be loaded.
 #'
 #'
@@ -46,6 +46,7 @@
 #' doi:10.1038/s41467-019-13983-9
 #'
 #' @export
+#' @importFrom utils data
 #' @importFrom ActivePathways read.GMT makeBackground ActivePathways
 #' @importFrom pbapply pblapply
 #' @importFrom stats cor.test p.adjust var

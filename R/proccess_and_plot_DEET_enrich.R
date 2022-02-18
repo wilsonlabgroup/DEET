@@ -42,11 +42,13 @@
 #'
 #' data("example_DEET_enrich_input")
 #' DEET_out <- DEET_enrich(example_DEET_enrich_input, example_gmt = TRUE)
-#' plotting_example <- proccess_and_plot_DEET_enrich(DEET_out, text_angle = 45, horizontal = TRUE, topn=4)
+#' plotting_example <- proccess_and_plot_DEET_enrich(DEET_out, text_angle = 45,
+#'horizontal = TRUE, topn=4)
 #'
 #' @references
 #'
 #' @export
+#' @importFrom utils data
 #'
 proccess_and_plot_DEET_enrich <- function(DEET_output, width=8, text_angle=0, horizontal =F, topn=5, ol_size=1, exclude_domain="", cluster_order=NULL, dot=F, colors = "Set2") {
 

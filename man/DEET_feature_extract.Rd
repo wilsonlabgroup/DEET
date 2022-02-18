@@ -4,7 +4,7 @@
 \alias{DEET_feature_extract}
 \title{DEET_feature_extract}
 \usage{
-DEET_feature_extract(mat, response, dataype)
+DEET_feature_extract(mat, response, datatype)
 }
 \arguments{
 \item{mat}{A gene-by-study matrix populated by the coefficients of that study.
@@ -41,7 +41,8 @@ metadata that a researcher queries.
 
 data(DEET_feature_extract_example_matrix)
 data(DEET_feature_extract_example_response)
-single1 <- DEET_feature_extract(DEET_feature_extract_example_matrix,DEET_feature_extract_example_response,"categorical")
+single1 <- DEET_feature_extract(DEET_feature_extract_example_matrix,
+DEET_feature_extract_example_response,"categorical")
 
 }
 \references{

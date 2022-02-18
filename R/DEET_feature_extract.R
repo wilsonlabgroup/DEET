@@ -33,22 +33,24 @@
 #'
 #' data(DEET_feature_extract_example_matrix)
 #' data(DEET_feature_extract_example_response)
-#' single1 <- DEET_feature_extract(DEET_feature_extract_example_matrix,DEET_feature_extract_example_response,"categorical")
+#' single1 <- DEET_feature_extract(DEET_feature_extract_example_matrix,
+#' DEET_feature_extract_example_response,"categorical")
 #'
 #' @references
 #'
 #' @export
 #' @importFrom glmnet glmnet coef.glmnet
 #' @importFrom stats cor.test p.adjust aov complete.cases wilcox.test
+#' @importFrom utils data
 #'
-DEET_feature_extract <- function(mat, response, dataype) {
+DEET_feature_extract <- function(mat, response, datatype) {
 
 # Make sure that the type of variable where we'll extract features from is a type that we can work with
-if(!(dataype %in% c("continuous","categorical","binomial"))) stop("Response variable must be 'continuous', 'categorical', or 'binomial'")
+if(!(datatype %in% c("continuous","categorical","binomial"))) stop("Response variable must be 'continuous', 'categorical', or 'binomial'")
 
 
 
-if(dataype == "continuous") {
+if(datatype == "continuous") {
   # Run an elastic net of the continuous variable
   if (is.factor(response)) response <- (as.numeric(levels(response))[response])
 
@@ -102,7 +104,7 @@ if(datatype == "categorical") {
 }
 
 
-if(dataype == "binomial") {
+if(datatype == "binomial") {
   tst1 <- glmnet::glmnet(x=t(mat), y=response, family = "binomial", alpha=0.5)
   # Could also add Wilcoxon's test
   l <- unique(y)

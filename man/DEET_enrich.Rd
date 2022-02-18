@@ -28,7 +28,7 @@ possible genes. Default value is NULL.}
 data within the DEET database or whether we are using the example set
 of 100 comparisons.}
 
-\item{local_Data}{String value giving directory where required
+\item{localData}{String value giving directory where required
 input files will be loaded.}
 }
 \value{

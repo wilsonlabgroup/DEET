@@ -27,32 +27,38 @@
 #'
 #' data(DEET_feature_extract_example_matrix)
 #' data(DEET_feature_extract_example_response)
-#' single1 <- DEET_feature_extract(DEET_feature_extract_example_matrix,DEET_feature_extract_example_response,"categorical")
+#' single1 <- DEET_feature_extract(DEET_feature_extract_example_matrix,
+#' DEET_feature_extract_example_response,"categorical")
 #'
 #' @references
 #'
 #' @export
+#' @importFrom utils data
 #' @importFrom dplyr arrange desc mutate row_number %>%
 #' @importFrom ggplot2 ggplot geom_bar aes geom_text coord_flip theme_bw theme element_text scale_x_continuous scale_fill_brewer facet_grid theme geom_point
 #' @importFrom stats na.omit
 #'
-count_intersection <- function(x){
-  return(length(unlist(strsplit(x, ","))))
-}
-process_plotdata <- function(plotdata, exclude_domain="", testclusters=""){
-  plotdata <- plotdata[order(plotdata$domain, plotdata$p.value),]
-  plotdata$term.name <- factor(plotdata$term.name, levels=unique(as.character(plotdata$term.name)))
-  #plotdata$domain <- factor(plotdata$domain, levels=c("BP", "MF", "CC", "keg", "hp"))
-  plotdata <- subset(plotdata, !domain %in% exclude_domain)
-  plotdata$n <- paste0("ol=", plotdata$`overlap.size`)
-  plotdata$cluster <- factor(plotdata$cluster, levels=testclusters)
-  plotdata <- plotdata %>%
-    dplyr::arrange(cluster, dplyr::desc(domain), -p.value) %>%
-    dplyr::mutate(order = dplyr::row_number())
-  return(plotdata)
-}
+
 
 DEET_enrichment_plot <- function(enrich_list, outname, width=8, text_angle=0, horizontal =F, topn=5, ol_size=1, exclude_domain="", cluster_order=NULL, dot=F, colors = "Set2"){
+
+  # Internal functions used
+  count_intersection <- function(x){
+    return(length(unlist(strsplit(x, ","))))
+  }
+  process_plotdata <- function(plotdata, exclude_domain="", testclusters=""){
+    plotdata <- plotdata[order(plotdata$domain, plotdata$p.value),]
+    plotdata$term.name <- factor(plotdata$term.name, levels=unique(as.character(plotdata$term.name)))
+    #plotdata$domain <- factor(plotdata$domain, levels=c("BP", "MF", "CC", "keg", "hp"))
+    plotdata <- subset(plotdata, !domain %in% exclude_domain)
+    plotdata$n <- paste0("ol=", plotdata$`overlap.size`)
+    plotdata$cluster <- factor(plotdata$cluster, levels=testclusters)
+    plotdata <- plotdata %>%
+      dplyr::arrange(cluster, dplyr::desc(domain), -p.value) %>%
+      dplyr::mutate(order = dplyr::row_number())
+    return(plotdata)
+  }
+
   testclusters <- names(enrich_list[sapply(enrich_list, nrow) >0])
   enrich_data_list <- lapply(testclusters, function(x){
     print(x)
