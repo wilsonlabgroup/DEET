@@ -43,7 +43,8 @@
 #' @examples
 #'
 #' data("example_DEET_enrich_input")
-#' DEET_out <- DEET_enrich(example_DEET_enrich_input, DEET_dataset = example_DEET_enrich_input)
+#' data("DEET_example_data")
+#' DEET_out <- DEET_enrich(example_DEET_enrich_input, DEET_dataset = DEET_example_data)
 #'
 #'
 #' @references

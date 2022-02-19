@@ -51,10 +51,18 @@ Generate barplots or dotplots from the output of DEET
 }
 \examples{
 
-data(DEET_feature_extract_example_matrix)
-data(DEET_feature_extract_example_response)
-single1 <- DEET_feature_extract(DEET_feature_extract_example_matrix,
-DEET_feature_extract_example_response,"categorical")
+data("example_DEET_enrich_input")
+data("DEET_example_data")
+DEET_out <- DEET_enrich(example_DEET_enrich_input, DEET_dataset = DEET_example_data)DEET_DE <- DEET_dataset$DEET_DE
+
+# converting output to format compatible with DEET_enrichment plot
+DE_example <- DEET_out$AP_DEET_DE_output$results
+DE_example$term.name <- DEET_out$AP_DEET_DE_output$metadata$DEET.Name
+DE_example$domain <- "DE"
+DE_example$overlap.size <- lengths(DE_example$overlap)
+DE_example$p.value <- DE_example$adjusted.p.val
+
+DE_example_plot <- DEET_enrichment_plot(list(DE_example = DE_example), "DE_example")
 
 }
 \references{

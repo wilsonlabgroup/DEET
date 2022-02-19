@@ -6,9 +6,9 @@
 \usage{
 DEET_enrich(
   DEG_list,
+  DEET_dataset,
   ordered = FALSE,
   background = NULL,
-  example_gmt = FALSE,
   localData = NULL
 )
 }
@@ -18,18 +18,23 @@ and log2FC values (3 columns in total). Can also be a character vector of
 gene symbols only. colnames of genes: c("gene_symbol", "padj", "coef")
 The rownames of the dataframe are also the gene symbols.}
 
+\item{DEET_dataset}{The databank of the differential expression enrichment tool.
+Appropriate inputs here are "DEET_example_data" stored within DEET, the "DEET_combined.rda" file
+from the DEET stable repositoy found at X, and the DEET database developmental repository found at Y.
+The DEET_dataset is a named list where details of it's structure can be found ?DEET_example_data.}
+
 \item{ordered}{Boolean value specifying whether DEG_list is a character
 vector of gene symbols that is ordered. Default value is FALSE.}
 
 \item{background}{Character vector of human gene symbols showing all
 possible genes. Default value is NULL.}
 
+\item{localData}{String value giving directory where required
+input files will be loaded.}
+
 \item{example_gmt}{Boolean value specifying whether we're using all of
 data within the DEET database or whether we are using the example set
 of 100 comparisons.}
-
-\item{localData}{String value giving directory where required
-input files will be loaded.}
 }
 \value{
 Named list where each element contains 6 objects. Each object will
@@ -53,7 +58,8 @@ will be queried to DEETs library of studies.
 \examples{
 
 data("example_DEET_enrich_input")
-DEET_out <- DEET_enrich(example_DEET_enrich_input, example_gmt = TRUE)
+data("DEET_example_data")
+DEET_out <- DEET_enrich(example_DEET_enrich_input, DEET_dataset = DEET_example_data)
 
 
 }
