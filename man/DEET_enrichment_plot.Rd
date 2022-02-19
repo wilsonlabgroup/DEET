@@ -64,8 +64,6 @@ DE_example$p.value <- DE_example$adjusted.p.val
 
 DE_example_plot <- DEET_enrichment_plot(list(DE_example = DE_example), "DE_example")
 
-}
-\references{
 
 }
 \author{
