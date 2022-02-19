@@ -37,6 +37,8 @@
 #' DEET_feature_extract_example_response,"categorical")
 #'
 #' @references
+#' Engebretsen, S., & Bohlin, J. (2019). Statistical predictions with glmnet.
+#' Clinical epigenetics, 11(1), 1-3.
 #'
 #' @export
 #' @importFrom glmnet glmnet coef.glmnet

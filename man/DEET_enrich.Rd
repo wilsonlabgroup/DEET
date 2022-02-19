@@ -31,10 +31,6 @@ possible genes. Default value is NULL.}
 
 \item{localData}{String value giving directory where required
 input files will be loaded.}
-
-\item{example_gmt}{Boolean value specifying whether we're using all of
-data within the DEET database or whether we are using the example set
-of 100 comparisons.}
 }
 \value{
 Named list where each element contains 6 objects. Each object will

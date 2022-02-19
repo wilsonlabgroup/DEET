@@ -53,7 +53,7 @@ Generate barplots or dotplots from the output of DEET
 
 data("example_DEET_enrich_input")
 data("DEET_example_data")
-DEET_out <- DEET_enrich(example_DEET_enrich_input, DEET_dataset = DEET_example_data)DEET_DE <- DEET_dataset$DEET_DE
+DEET_out <- DEET_enrich(example_DEET_enrich_input, DEET_dataset = DEET_example_data)
 
 # converting output to format compatible with DEET_enrichment plot
 DE_example <- DEET_out$AP_DEET_DE_output$results

@@ -12,14 +12,10 @@
 #' Appropriate inputs here are "DEET_example_data" stored within DEET, the "DEET_combined.rda" file
 #' from the DEET stable repositoy found at X, and the DEET database developmental repository found at Y.
 #' The DEET_dataset is a named list where details of it's structure can be found ?DEET_example_data.
-#'
 #' @param ordered Boolean value specifying whether DEG_list is a character
 #' vector of gene symbols that is ordered. Default value is FALSE.
 #' @param background Character vector of human gene symbols showing all
 #' possible genes. Default value is NULL.
-#' @param example_gmt Boolean value specifying whether we're using all of
-#' data within the DEET database or whether we are using the example set
-#' of 100 comparisons.
 #' @param localData String value giving directory where required
 #' input files will be loaded.
 #'
