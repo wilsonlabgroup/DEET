@@ -7,6 +7,12 @@
 #' and log2FC values (3 columns in total). Can also be a character vector of
 #' gene symbols only. colnames of genes: c("gene_symbol", "padj", "coef")
 #' The rownames of the dataframe are also the gene symbols.
+#'
+#' @param DEET_dataset The databank of the differential expression enrichment tool.
+#' Appropriate inputs here are "DEET_example_data" stored within DEET, the "DEET_combined.rda" file
+#' from the DEET stable repositoy found at X, and the DEET database developmental repository found at Y.
+#' The DEET_dataset is a named list where details of it's structure can be found ?DEET_example_data.
+#'
 #' @param ordered Boolean value specifying whether DEG_list is a character
 #' vector of gene symbols that is ordered. Default value is FALSE.
 #' @param background Character vector of human gene symbols showing all
@@ -37,7 +43,7 @@
 #' @examples
 #'
 #' data("example_DEET_enrich_input")
-#' DEET_out <- DEET_enrich(example_DEET_enrich_input, example_gmt = TRUE)
+#' DEET_out <- DEET_enrich(example_DEET_enrich_input, DEET_dataset = example_DEET_enrich_input)
 #'
 #'
 #' @references
@@ -51,7 +57,7 @@
 #' @importFrom pbapply pblapply
 #' @importFrom stats cor.test p.adjust var
 #'
-DEET_enrich <- function(DEG_list, ordered = FALSE, background = NULL, example_gmt = FALSE, localData = NULL){
+DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NULL,  localData = NULL){
 
 
   # Internal data loaded through sysdata.rda.
@@ -196,42 +202,19 @@ DEET_enrich <- function(DEG_list, ordered = FALSE, background = NULL, example_gm
       stop("Background must be a character vector.")
     }
   }
-  if(example_gmt) {
-    data("DEET_example_data")
-    DEET_DE <- DEET_example_data$DEET_DE
-    DEET_gmt_BP <- DEET_example_data$DEET_gmt_BP
-    DEET_gmt_TF <- DEET_example_data$DEET_gmt_TF
-    DEET_gmt_DE <- DEET_example_data$DEET_gmt_DE
-    DEET_metadata <- DEET_example_data$DEET_metadata
-    gmt_BP <- DEET_example_data$gmt_BP
-    gmt_TF <- DEET_example_data$gmt_TF
+  nameRight <- all(names(DEET_dataset) %in%     c("DEET_DE", "DEET_gmt_BP", "DEET_gmt_TF", "DEET_gmt_DE", "DEET_metadata", "gmt_BP", "gmt_TF"))
 
-
-  } else {
-    if(is.null(localData)) {
-      message("Data for DEET is not in local directory.")
-      warning("Data for DEET is not in local directory.")
-      confirm <- readline("Enter YES to approve of a >200Mb download. ")
-      if(toupper(confirm) == "YES") {
-        message("Downloading DEET to temporary file.")
-        warning("Downloading DEET to temporary file, we reccomend downloading the data from.")
-        # paste the directory when available.
-
-      } else {
-        message(paste0("Downloaded DEET data is at: ", localData))
-        load(paste0(localData,"DEET_metadata.rda"))  # DEET_metadata: DEET's metadata of studies.
-        rownames(DEET_metadata) <- DEET_metadata$DEET.ID
-        load(paste0(localData,"DEET_DE_final.rda"))  # DEET_DE: DEET's DE of studies.
-        #
-        # # b) ActivePathway (AP) files.
-        gmt_BP <- ActivePathways::read.GMT(paste0(localData,"Human_GO_AllPathways_with_GO_iea_June_01_2021_symbol.gmt"))
-        gmt_TF <- ActivePathways::read.GMT(paste0(localData,"Human_TranscriptionFactors_MSigdb_June_01_2021_symbol.gmt"))
-        DEET_gmt_DE <- ActivePathways::read.GMT(paste0(localData,"DEET_DE.gmt"))
-        DEET_gmt_BP <- ActivePathways::read.GMT(paste0(localData,"DEET_BP.gmt"))
-        DEET_gmt_TF <- ActivePathways::read.GMT(paste0(localData,"DEET_TF.gmt"))
-      }
-    }
+  if(!nameRight) {
+    stop("Names of the list in DEET dataset aren't correct. Make sure appopriate file is downloaded and inputted. Check 'DEET_example_data' for reference.")
   }
+
+  DEET_DE <- DEET_dataset$DEET_DE
+  DEET_gmt_BP <- DEET_dataset$DEET_gmt_BP
+  DEET_gmt_TF <- DEET_dataset$DEET_gmt_TF
+  DEET_gmt_DE <- DEET_dataset$DEET_gmt_DE
+  DEET_metadata <- DEET_dataset$DEET_metadata
+  gmt_BP <- DEET_dataset$gmt_BP
+  gmt_TF <- DEET_dataset$gmt_TF
 
   # ============================================================================
 

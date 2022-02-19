@@ -42,12 +42,15 @@
 
 DEET_enrichment_plot <- function(enrich_list, outname, width=8, text_angle=0, horizontal =F, topn=5, ol_size=1, exclude_domain="", cluster_order=NULL, dot=F, colors = "Set2"){
 
-  n <- cluster <- domain <- p.value <- overlap.size <- ""
+  #empty variables to deal with column-name note fo dplyr
+  n <- cluster <- domain <- p.value <- overlap.size <- term.id <- term.name <- ""
 
   # Internal functions used
   count_intersection <- function(x){
     return(length(unlist(strsplit(x, ","))))
   }
+
+  # Get plot data ready for ggplot
   process_plotdata <- function(plotdata, exclude_domain="", testclusters=""){
     plotdata <- plotdata[order(plotdata$domain, plotdata$p.value),]
     plotdata$term.name <- factor(plotdata$term.name, levels=unique(as.character(plotdata$term.name)))
@@ -69,6 +72,7 @@ DEET_enrichment_plot <- function(enrich_list, outname, width=8, text_angle=0, ho
   }
 
   testclusters <- names(enrich_list[sapply(enrich_list, nrow) >0])
+  # organize data frame for enrichment group
   enrich_data_list <- lapply(testclusters, function(x){
     print(x)
     enrich_data <- enrich_list[[x]]
@@ -82,6 +86,7 @@ DEET_enrichment_plot <- function(enrich_list, outname, width=8, text_angle=0, ho
     enrich_data$cluster <- rep(x, nrow(enrich_data))
     return(enrich_data)
   })
+  # Get data for plotting together into a df
   plotdata <- do.call("rbind", enrich_data_list)
   plotdata <- process_plotdata(plotdata, exclude_domain=exclude_domain, testclusters = testclusters)
   plotdata_all <- do.call("rbind", lapply(testclusters, function(x) {
@@ -94,6 +99,7 @@ DEET_enrichment_plot <- function(enrich_list, outname, width=8, text_angle=0, ho
   }
   #pdf(paste0(outname, "_gprofiler_enrichment_top", topn, "_", Sys.Date(), ".pdf"), width=width, height = nrow(plotdata)*0.15+1)
   textpos <- 0.80*(-log10(min(plotdata$p.value)))
+  # make the barplot
   p <- ggplot2::ggplot(plotdata) +
     #geom_bar(aes(x=`term.name`, y=-log10(p.value), fill=domain), stat="identity") +
     ggplot2::geom_bar(ggplot2::aes(x=order, y=-log10(p.value), fill=domain), stat="identity") +
@@ -127,6 +133,7 @@ DEET_enrichment_plot <- function(enrich_list, outname, width=8, text_angle=0, ho
       ggplot2::facet_grid(~cluster, scales = "free_x") +
       ggplot2::scale_fill_brewer(palette = colors)
     if(dot){
+      # make the dotplot
       p <-  ggplot2::ggplot(used_data) +
         ggplot2::geom_point( ggplot2::aes(x=`term.name`, y=cluster, size=-log10(p.value), color=domain)) +
         ggplot2::coord_flip() +
