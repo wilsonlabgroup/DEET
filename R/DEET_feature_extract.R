@@ -107,7 +107,7 @@ if(datatype == "categorical") {
 if(datatype == "binomial") {
   tst1 <- glmnet::glmnet(x=t(mat), y=response, family = "binomial", alpha=0.5)
   # Could also add Wilcoxon's test
-  l <- unique(y)
+  l <- unique(response)
   if(length(l) != 2) stop("There are more than two conditions, datatype should be 'binomial' or 'continuous'.")
 
   wilcoxon_comp <- t(apply(mat,1,function(x) {

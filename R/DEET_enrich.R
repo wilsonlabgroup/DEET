@@ -156,7 +156,7 @@ DEET_enrich <- function(DEG_list, ordered = FALSE, background = NULL, example_gm
         padj[i] <- padj[i-1] * 0.95
       }
       padj <- rev(padj)
-      log2FC <- rev(seq(1, 1 + 0.1*(nrow(DEG_processed) - 1), 0.1))
+      log2fc <- rev(seq(1, 1 + 0.1*(nrow(DEG_processed) - 1), 0.1))
 
       DEG_processed$padj <- padj
       DEG_processed$coef <- log2fc

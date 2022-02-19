@@ -53,6 +53,17 @@ DEET_enrichment_plot <- function(enrich_list, outname, width=8, text_angle=0, ho
     plotdata <- subset(plotdata, !domain %in% exclude_domain)
     plotdata$n <- paste0("ol=", plotdata$`overlap.size`)
     plotdata$cluster <- factor(plotdata$cluster, levels=testclusters)
+
+    # This is just so that the "R code for possible problems" check in
+    # devtools is passed, as it has a hard time knowing col names
+    # in tidyr are not internal variables
+    n <- plotdata$n
+    cluster <- plotdata$cluster
+    domain <- plotdata$domain
+    p.value <- plotdata$p.value
+    overlap.size <- plotdata$overlap.size
+
+
     plotdata <- plotdata %>%
       dplyr::arrange(cluster, dplyr::desc(domain), -p.value) %>%
       dplyr::mutate(order = dplyr::row_number())
