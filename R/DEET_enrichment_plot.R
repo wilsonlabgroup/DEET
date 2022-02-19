@@ -42,6 +42,8 @@
 
 DEET_enrichment_plot <- function(enrich_list, outname, width=8, text_angle=0, horizontal =F, topn=5, ol_size=1, exclude_domain="", cluster_order=NULL, dot=F, colors = "Set2"){
 
+  n <- cluster <- domain <- p.value <- overlap.size <- ""
+
   # Internal functions used
   count_intersection <- function(x){
     return(length(unlist(strsplit(x, ","))))
@@ -57,11 +59,7 @@ DEET_enrichment_plot <- function(enrich_list, outname, width=8, text_angle=0, ho
     # This is just so that the "R code for possible problems" check in
     # devtools is passed, as it has a hard time knowing col names
     # in tidyr are not internal variables
-    n <- plotdata$n
-    cluster <- plotdata$cluster
-    domain <- plotdata$domain
-    p.value <- plotdata$p.value
-    overlap.size <- plotdata$overlap.size
+
 
 
     plotdata <- plotdata %>%
