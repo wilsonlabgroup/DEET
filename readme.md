@@ -5,6 +5,8 @@
 
 ### Date: 02/21/2022
 
+![alt text](https://github.com/wilsonlabgroup/DEET/blob/DEET_V2.png?raw=true)
+
 
 ## Description
 
