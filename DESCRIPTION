@@ -25,7 +25,9 @@ Imports:
 	ggplot2,
 	glmnet,
 	utils,
-	stats
+	stats,
+	ggrepel,
+	downloader
 RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)
 URL: https://github.com/wilsonlabgroup/DEET
