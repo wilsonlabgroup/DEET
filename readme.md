@@ -7,6 +7,7 @@
 
 ![alt text](https://github.com/wilsonlabgroup/DEET/blob/DEET_V2.png?raw=true)
 
+Design by Sarah Watt
 
 ## Description
 
