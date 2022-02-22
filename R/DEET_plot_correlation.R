@@ -24,7 +24,7 @@
 #'}
 #'
 #' @export
-#' @importFrom ggplot2 ggplot aes geom_point scale_color_manual geom_text_repel theme_bw xlab ylab theme element_text
+#' @importFrom ggplot2 ggplot aes geom_point scale_color_manual theme_bw xlab ylab theme element_text
 #' @importFrom ggrepel geom_text_repel
 #'
 

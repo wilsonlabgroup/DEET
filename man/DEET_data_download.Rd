@@ -49,6 +49,7 @@ the DEET database that are required for the DEET_enrich
 and DEET_feature_extractfunctions.
 }
 \examples{
+\donttest{
 
 # Download the metadata. Downloading other
 # files within DEET are larger and take
@@ -57,6 +58,8 @@ downloaded <- DEET_data_download(x = "metadata")
 
 # extract metadata from the list
 metadata <- downloaded[["metadata"]]
+
+}
 
 }
 \references{

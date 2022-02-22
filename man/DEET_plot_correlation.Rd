@@ -20,6 +20,7 @@ Take significant correlation outputs and generate
 scatterplots of the genes DE in one or the other.
 }
 \examples{
+\donttest{
 
 data("example_DEET_enrich_input")
 data("DEET_example_data")
@@ -27,6 +28,7 @@ DEET_out <- DEET_enrich(example_DEET_enrich_input, DEET_dataset = DEET_example_d
 correlation_input <- DEET_out$DE_correlations
 correlation_plots <- DEET_plot_correlation(correlation_input)
 
+}
 
 }
 \author{
