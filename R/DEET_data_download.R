@@ -63,6 +63,8 @@
 #' @importFrom downloader download
 #'
 DEET_data_download <- function(x = "ALL") {
+  #dummy_downloads
+  DEET_metadata <- DEET_combined <- DEET_log2FC_matrix <- ""
   inputCheck <- c(x %in% c("ALL", "enrich", "metadata", "feature_matrix"))
   if(!inputCheck) {
   stop("Inputted variable was not in options: ALL, enrich, metadata, feature_matrix.

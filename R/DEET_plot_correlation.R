@@ -32,6 +32,11 @@
 
 DEET_plot_correlation <- function(correlation_input ) {
 
+
+  # dummy variables for ggplot
+
+  input <- DEET <- color <- label <- ""
+
 if(!is.list(correlation_input)) {
   stop("correlation_input is not of class list.")
 }
