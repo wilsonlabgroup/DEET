@@ -188,4 +188,6 @@ The output of these three comparisons will be comparable, however the correlatio
 
 When the gene set is ordered, a Spearman's correlation is interpretable, as it is simply the rank-order of genes, however a Pearson's correlation is not interpretable as we do not know the relative difference in coefficient size of your inputted genes
 
+If the gene list is unordered, correlation analysis is entirely uninterpretable and is not run. You are given this message: `Input gene list is considered UNORDERED: Correlation analysis will not be run and pathway enrichment will be unordered.`
 
+Since it not run there is nothing significant, and the output is `No studies significantly correlate to your gene list.`

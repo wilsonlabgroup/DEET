@@ -71,7 +71,7 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
 
   # ============================================================================
 
-  message(paste("Query end date and time:", Sys.time()))
+  message(paste("Query start date and time:", Sys.time()))
 
 
   # Internal function to run correlations
@@ -438,7 +438,12 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
                             distributions = cor_mats_sig,
                             metadata = meta_match)
   } else{
-    DE_correlations <- "No studies significantly correlate to your gene list."
+    if(cor_results_sig == "No variance in coefs. Cannot proceed with correlation.") {
+      DE_correlations <- "No variance in coefs. Cannot proceed with correlation."
+    } else {
+      DE_correlations <- "No studies significantly correlate to your gene list."
+
+    }
     warning(DE_correlations)
   }
 
