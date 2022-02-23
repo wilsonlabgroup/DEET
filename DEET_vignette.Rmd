@@ -205,3 +205,36 @@ Named list where each element contains 6 objects. Each object will contain the r
 * DE_correlations - A list containing three objects. The first objects, `results` is a data frame where the rows are different pairwise comparisons and the columns are the ouput of the correlational analysis between overlapping genes. Columns are the DEET ID and DEET name, the pearson/spearman's correlation coefficients, as well as their raw and FDR adjusted p-values. The `metadata` object are the subsetted rows from the metadata data frame that align with the studies containing significant correlations. Lastly, the `distributions` object is a list where each element is a diffierent significantly associated pairwise comparisons. Each element is populated by a dataframe where rows are genes significant in at least one study, columns are the coefficients from the input study and DEET, and colour designates whether the gene is DE in one study (grey), both studies in the same direction (purple) and both studies in the opposite direction (orange).
 
 ### DEET_feature_extract
+
+#### Inputs
+
+* DEET_feature_extract expects three variables: a gene-by-comparison matrix populated with a statistic related to differential expresion (e.g., p-value, fold-change), a response variable (i.e., an output dependent variable), and a category.
+
+* mat - a gene-bycomparison matrix populated with a statistic related to differential expression. The matrix in `DEET_data_download()` is populated with the log2FC of genes if they were deemed as significant (padj < 0.05). Other matrices, namely those populated by p-value, fold-change, and t-statitic (including the matrices for all DEGs) can be found in `http://wilsonlab.org/public/DEET_data/feature_matrices` and can be downloaded separately.
+* respeonse: a character vector identifying each study, this can be categorical, binomial (e.g. 0/1, T/F), or continuous
+* datatype: a character indicating if the response is "binomial", "categorical", or "continuous". This is case sensitive.
+
+#### Example
+
+```{r DEET_feature_extract_example, eval=FALSE}
+
+data(DEET_feature_extract_example_matrix)
+data(DEET_feature_extract_example_response)
+single1 <- DEET_feature_extract(DEET_feature_extract_example_matrix,
+DEET_feature_extract_example_response,"categorical")
+
+```
+
+#### Outputs
+
+DEET feature extract outputs a list of three objects.
+
+* elastic_net_coefficients - a named list where each element is a different option of the categorical or binomial variable. Each element is populated with a named vector where the name is a gene and the vector is the coefficient of an eleastic net regression. If the `datatype` is "continuous", then this will just be a one-element list.
+* elastic_net - The direct output of the glmnet elastic net. The parameters of `glmnet` are default aside from the `family`, which is determined by `datatype` and alpha which is set to 0.5 (selecting an elastic net instead of L1 or L2 regularized).
+* basic_features - more basic statistical analysis to find genes associated with features. It is a list with "test", a character vector stating "ANOVA", "Wilcoxon", or "correlation" depending on if the `datatype` input was categorical, binomial or continuous respsectively. The other object is a dataframe showing the significance of each gene, where rows are genes, and columns are stastistics (e.g., F-statistic for ANOVA), P-value, and FDR-adjusted p-value.
+
+### Plotting the outputs of DEET_enrich.
+
+
+
+
