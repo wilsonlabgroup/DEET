@@ -20,7 +20,8 @@
 #'   \item{DEET_gmt_BP}{ A list of class GMT, which is a list of studies where each study is populated by comparison id (internal DEET identifier), comparison name (interpretable comparison name), and a gene set. In this case the gene-set is the pathways that are enriched within that study.}
 #'   \item{DEET_gmt_TF}{ A list of class GMT, which is a list of studies where each study is populated by comparison id (internal DEET identifier), comparison name (interpretable comparison name), and a gene set. In this case the gene-set is the TFs that are enriched within that study.}
 #'   \item{DEET_gmt_DE}{ A list of class GMT, which is a list of studies where each study is populated by comparison id (internal DEET identifier), comparison name (interpretable comparison name), and a gene set. In this case the gene-set is the DEGs that are enriched within that study.}
-#'   \item{gmt_BP}{ Kupffer markers identified by panglao}
+#'   \item{gmt_BP}{ A list of class GMT, which is a list of gene ontology gene-sets acquired from the bader lab `http://download.baderlab.org/EM_Genesets/`}#'
+#'   \item{gmt_TF}{ A list of class GMT, which is a list of Transcription Factor gene-sets acquired from the bader lab `http://download.baderlab.org/EM_Genesets/`}
 #'   \item{DEET_metadata}{ For every pairwise comparison, the study name, source (SRA, TCGA, GTEx and SRA-manual), description from the DRA compendium, the number of samples (total, up-condition, and down-condition), samples (total ,up-condition, down-condition), tissue (including tumour from TCGA), number of DEs (total, up-condition, down-condition), age (mean +- sd), sex, top 15 DEGs - up, top 15 DEGs - down, top 5 enriched pathways, and top 5 enriched TFs. PMID are also available for studies selected from SRA. Lastly, each pairwise comparison was given an overall category based on those decided in Crow et al., 2019. }
 #' }
 #'

@@ -16,8 +16,6 @@
 #' vector of gene symbols that is ordered. Default value is FALSE.
 #' @param background Character vector of human gene symbols showing all
 #' possible genes. Default value is NULL.
-#' @param localData String value giving directory where required
-#' input files will be loaded.
 #'
 #'
 #' @return Named list where each element contains 6 objects. Each object will
@@ -54,7 +52,7 @@
 #' @importFrom pbapply pblapply
 #' @importFrom stats cor.test p.adjust var
 #'
-DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NULL,  localData = NULL){
+DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NULL){
 
 
   # Internal data loaded through sysdata.rda.
@@ -72,6 +70,9 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
    #DEET_gmt_TF <- ActivePathways::read.GMT("DEET_TF.gmt")
 
   # ============================================================================
+
+  message(paste("Query end date and time:", Sys.time()))
+
 
   # Internal function to run correlations
   single_gene_set_cor_test <- function(index, DEG_processed, DEET_DE,
@@ -333,7 +334,7 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
 
   # 6) Perform a correlation test of input gene list to DEET’s studies
   # (both Pearson and Spearman).
-  if (var(DEG_processed$coef) <= 0){
+  if (var(DEG_processed$coef) == 0){
     cor_results_sig <- "No variance in coefs. Cannot proceed with correlation."
     warning(cor_results_sig)
   } else{

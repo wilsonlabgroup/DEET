@@ -1,0 +1,191 @@
+---
+  title: "Differential Expression Enrichment Tool (DEET)"
+author: "Dustin Sokolowski"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown:::html_vignette:
+  toc: true
+vignette: >
+  %\VignetteIndexEntry{Differential Expression Enrichment Tool (DEET)}
+%\VignetteEncoding{UTF-8}
+%\VignetteEngine{knitr::rmarkdown}
+---
+  
+## Install and load DEET
+
+DEET relies on the following packages. Since they are all CRAN in origin, they should download and install automatically with `devtools::install_github` or `utils::install.packages`. The required dependencies are listed below.
+
+* ggplot2 - CRAN
+* ActivePathways - CRAN
+* stats - CRAN
+* utils - CRAN
+* downloader - CRAN
+* glmnet - CRAN
+* ggrepel - CRAN
+* dplyr - CRAN
+* pbapply - CRAN
+
+### Installation
+
+1. Github (Development Version)
+
+
+```{r install_developter, eval=FALSE}
+
+devtools::install_github("wilsonlabgroup/DEET")
+
+```
+
+
+2. CRAN (Stable Release)
+
+```{r install_cran, eval=FALSE}
+
+# IN DEVELOPMENT
+
+```
+
+
+## Downloading files
+
+All processed DEGs, metadata, and enriched pathways in formats compatible with this package as well as other methods such as gene set enrichment analysis are stored here: http://wilsonlab.org/public/DEET_data/
+
+No functions within DEET automatically load data for the user, so the data either needs to be downloaded directly from the ftp, or using the downloader function.
+
+The `DEET_data_download` function, with possible inputs "ALL", "metadata", "enrich", and "feature_extract" automatically downloads the data required to run `DEET_enrich` and/or `DEET_feature_extract`.
+
+We reccomended using:
+```{r download_data, eval=FALSE}
+
+downloaded <- DEET_data_download("ALL")
+metadata <- downloaded$metadata
+DEET_feature_extract_input <- downloaded$DEET_feature_extract
+DEET_enrich_input <- downloaded$DEET_enrich
+
+```
+
+Here:
+`DEET_enrich_input` replaces `DEET_example_data` for `DEET_enrich()`.
+`DEET_feature_extract_input` replaces `DEET_feature_extract_example_matrix` for `DEET_feature_extract()`
+Lastly, `metadata` is not directly used in any of the function, but summarizes all of the pairwise comparisons using the following columns.
+
+Once download, save these data and DEET can be used offline.
+
+
+### Structure of required datatypes
+
+#### metadata
+
+A comparison - by - explanatory piece of data dataframe providing important details to contextualize each study. For every pairwise comparison, the study name, source (SRA, TCGA, GTEx and SRA-manual), description from the DRA compendium, the number of samples (total, up-condition, and down-condition), samples (total ,up-condition, down-condition), tissue (including tumour from TCGA), number of DEs (total, up-condition, down-condition), age (mean +- sd), sex, top 15 DEGs - up, top 15 DEGs - down, top 5 enriched pathways, and top 5 enriched TFs. PMID are also available for studies selected from SRA. Lastly, each pairwise comparison was given an overall category based on those decided in Crow et al., 2019.
+
+#### DEET_enrich_input
+
+This is the meat and potatoes of the DEET dataset. Here, you can find all of the significant DE genes computed within DEET (padj < 0.05), DEGs, pathways, and TFs sorted into *gmt files compatible with traditional pathway enrichment tools (e.g., GSEA, gprofiler etc.), respective metadata, and the pathway enrichment and TF enrichment files used to generate the internal pathway enrichments of `DEET_enrich`. A more specific breakdown of these objects are below:
+
+* DEET_enrich_input: A named list of seven objects containing the data frames summarizing the DEGs from comparisons within DEET, GMT objects of comparisons within DEET for enrichment through ActivePathways, GMT objects for basic pathway and TF enrichment, and a dataframe for the metadata of each study.
+* DEET_DE: A list of data frames containing the significant DE genes, mean expression, log2fold-change, and padj from DESeq (padj < 0.05).
+* DEET_gmt_BP: A list of class GMT, which is a list of studies where each study is populated by comparison id (internal DEET identifier), comparison name (interpretable comparison name), and a gene set. In this case the gene-set is the pathways that are enriched within that study.
+* DEET_gmt_TF: A list of class GMT, which is a list of studies where each study is populated by comparison id (internal DEET identifier), comparison name (interpretable comparison name), and a gene set. In this case the gene-set is the TFs that are enriched within that study.
+* DEET_gmt_DE: A list of class GMT, which is a list of studies where each study is populated by comparison id (internal DEET identifier), comparison name (interpretable comparison name), and a gene set. In this case the gene-set is the DEGs that are enriched within that study.
+* gmt_BP: A list of class GMT, which is a curated human gene ontology  gene sets from the Bader Lab `http://download.baderlab.org/EM_Genesets/`. 
+* gmt_TF: A list of class GMT, which is a curated human transcription factor gene sets from the Bader Lab `http://download.baderlab.org/EM_Genesets/`. 
+* DEET_metadata: the same as the `metadata` dataframe (see above).
+
+#### DEET_feature_extract_input
+
+A gene by comparison matrix populated by the log2Fold-change of genes that are significantly DE in the comparison (padj < 0.05). The file is the input to the `mat` variable in DEET_feature_extract.
+
+## Implementation summary
+
+The primary function of the DEET R package is to allow users to query their own list of DEGs against the consistently computed DEGs within DEET by using the function `DEET_enrich()`. The optimal input into `DEET_enrich()` is a data frame of genes (human gene symbols) with an associated p-value and coefficient (e.g., Fold-change) in conjunction with a list of genes designating the statistical background. `DEET_enrich()` first identifies enriched biological pathways and TF targets using the *.gmt files used for all of the DEET comparisons (i.e.,  “Human_GO_AllPathways_with_GO_iea_June_01_2021_symbo.gmt” for pathways and “Human_TranscriptionFactors_MSigdb_June_01_2021_symbol.gmt” for TFs), allowing us to not only compare overlapping genes between the user-inputted genes and the DEGs in DEET but also overlapping pathways and TFs. All gene-set enrichment within the `DEET_enrich()` functions use ActivePathways with all detected genes as the background, Brown’s p-value fusion method, a false-discovery rate for p-value correction, and a cutoff of 0.05. Then, `DEET_enrich()` enriches the users’ inputted genes, pathways, and TF targets against the DEGs, pathways, and TF targets stored within DEET. Enrichment of the user’s inputted gene lists against the DE comparisons within DEET are also completed with ActivePathways, with a minimum geneset filter of 15 and a maximum of 10000. Then, `DEET_enrich()` computes the Spearman’s and Pearson’s correlation between the coefficients within the user’s imputed list of DEGs that overlap with the log2(Fold-change) of DEGs within enriched pairwise comparisons.P-values of these correlations are corrected with an FDR-adjustment. Together, DEET_enrich() returns significantly enriched studies based on overlapping DEGs, pathways, and TFs. Similarly, `DEET_enrich()` returns the traditional pathway and TF motif enrichment of the inputted gene list. All enrichment outputs are in the format of the output of ActivePathways (study, FDR-adjusted p-value, input length, DE comparison length, overlapping genes). `DEET_enrich()` also returns a dataframe of the Spearman’s and Pearson’s correlation (with associated FDR-adjusted p-values) between the inputted DE list with the DEGs found in DEET as well as the intersecting DEGs within those studies. 
+Optionally, `DEET_enrich()` may be used with a generic gene list (i.e. without P-values or coefficients). If the inputted gene list is ordered, then the p-value is artificially generated as  equation 1 and the coefficient is artificially generated as equation 2. We assume an inputted list in decreasing order of significance, so the FDR and coef in equations 1 and 2 are reversed. `DEET_enrich()` then runs normally but Pearson's correlation between the inputted gene list and the DEGs within DEET are excluded. If the inputted gene list is unordered, then all of the p-values are set to 0.049 and both Spearman’s and Pearon’s correlations between the users inputted genes and the DEGs within DEET are excluded. If users do not provide a background set of genes, then we assume the background set is all genes detected within DEET.
+
+For a sorted list of genes without a p-value or coefficient:
+ Note, this happens internally, you do not have to do it.
+ 
+```{r orders_list, eval=FALSE}
+
+DEG_list <- c("a", "b", "c", "d") # list of genes user inputs
+
+DEG_processed <- data.frame(gene_symbol = DEG_list)
+# DEG list is the list of genes that the user inputs
+
+      padj <- 0.049
+      for(i in 2:nrow(DEG_processed)) {
+        padj[i] <- padj[i-1] * 0.95
+      }
+      padj <- rev(padj)
+      log2fc <- rev(seq(1, 1 + 0.1*(nrow(DEG_processed) - 1), 0.1))
+
+      DEG_processed$padj <- padj
+      DEG_processed$coef <- log2fc
+      colnames(DEG_processed) <- c("gene_symbol", "padj", "coef")
+    
+
+```
+ 
+
+The DEET R package also contains plotting functions to summarize the most significant studies based on each enrichment test and correlation within `DEET_enrich()`. The `proccess_and_plot_DEET_enrich()`  function plots barplots of the most enriched studies based on gene set enrichment (ActivePathways) of studies enriched based on overlapping DEGs, pathways, and TF targets. The `DEET_plot_correlation()` function generates scatterplots of the most enriched studies based on Spearman's correlation analysis. All plots are generated using ggplot2, and the functions return the ggplot2 objects, allowing researchers to further modify and/or save the plots.
+
+Lastly, the DEET R package contains a function called `DEET_feature_extract()`, which allows researchers to identify genes that are associated with metadata. If the response variable are continuous (e.g., number of DEGs in study, Fold-change of TP53 etc.) then features are extracted by calculating the coefficients from a Gaussian family elastic net regression using the glmnet R package, as well as Spearman’s correlation between every gene and the response variable. If the response variable is categorical (e.g., Source, Category etc.), then features are extracted by calculating the coefficients from a multinomial family elastic net regression, as well as an ANOVA between each category within the response variable. Lastly, in the response variable is ordinal (e.g., enriches for TNFa pathway, Cancer study yes/no etc.), then features are extracted using a binomial family elastic net regression, as well as a Wilcoxon’s test between the two categories within the response variable.
+
+## Breaking down each core function within DEET
+
+### DEET_enrich: querying your own list again the DEGs stored within DEET.
+
+#### Inputs
+* `DEET_enrich()` expects a list of human gene symbols as either a character vector or as a data frame with the columns `c("gene_symbol", "padj", "coef"). If you are inputted DEGs, the log2Fold-change is the most appropriate coefficient, but I left this general for other inputted data types (e.g., effect size from GWAS). The `example_DEET_enrich_input` has the structure required for a gene list with p-values and coefficients. An example of the unordered list is `example_DEET_enrich_input$gene_symbol`.
+
+* DEET_dataset should either be the example file in `DEET_example_data` or `DEET_enrich_input` downloaded by the downloader function or manually from the FTP. other options will likely cause the tool to crash.
+
+* ordered: This parameter only applies when the `DEG_list` variable is a character vector (not a dataframe). It determins if the inputted list is ordered or not.
+
+* background: a character vector of genes within the universe. For example, if your input is a list of DEGs in RNA-seq, then "background" should be all of your detected genes. Like in traditional pathway enrichment, not seeting a background may bias the enriched studies by tissue and/or cell-type as more highly expressed genes have more power to be detected as DE.
+
+#### Examples 
+
+##### Running DEET with an datafame
+
+```{r DEET_enrich_DF, eval=FALSE}
+
+data("example_DEET_enrich_input")
+data("DEET_example_data")
+DEET_out <- DEET_enrich(example_DEET_enrich_input, DEET_dataset = DEET_example_data)
+
+
+```
+
+
+##### Running DEET with an ordered gene list
+
+```{r DEET_enrich_ordered, eval=FALSE}
+
+data("example_DEET_enrich_input")
+data("DEET_example_data")
+
+geneList <- example_DEET_enrich_input$gene_symbol
+DEET_out <- DEET_enrich(geneList, DEET_dataset = DEET_example_data, ordered = TRUE)
+
+
+```
+
+##### Running DEET with an unordered gene list
+
+```{r DEET_enrich_ordered, eval=FALSE}
+
+data("example_DEET_enrich_input")
+data("DEET_example_data")
+
+geneList <- example_DEET_enrich_input$gene_symbol
+DEET_out <- DEET_enrich(geneList, DEET_dataset = DEET_example_data, ordered =FALSE)
+
+
+```
+
+#### Outputs
+
+The output of these three comparisons will be comparable, however the correlation variable is of note when the input gene set is just a list of genes.
+
+When the gene set is ordered, a Spearman's correlation is interpretable, as it is simply the rank-order of genes, however a Pearson's correlation is not interpretable as we do not know the relative difference in coefficient size of your inputted genes
+
+

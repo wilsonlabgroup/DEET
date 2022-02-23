@@ -123,9 +123,12 @@ devtools::install_github("wilsonlabgroup/DEET")
 
 ```{r install_cran, eval=FALSE}
 
-IN DEVELOPMENT
+# IN DEVELOPMENT
 
 ```
+
+
+
 
 
 
