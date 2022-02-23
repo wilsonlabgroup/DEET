@@ -4,13 +4,7 @@
 \alias{DEET_enrich}
 \title{DEET_enrich}
 \usage{
-DEET_enrich(
-  DEG_list,
-  DEET_dataset,
-  ordered = FALSE,
-  background = NULL,
-  localData = NULL
-)
+DEET_enrich(DEG_list, DEET_dataset, ordered = FALSE, background = NULL)
 }
 \arguments{
 \item{DEG_list}{Data frame or matrix of gene symbols with corresponding padj
@@ -28,9 +22,6 @@ vector of gene symbols that is ordered. Default value is FALSE.}
 
 \item{background}{Character vector of human gene symbols showing all
 possible genes. Default value is NULL.}
-
-\item{localData}{String value giving directory where required
-input files will be loaded.}
 }
 \value{
 Named list where each element contains 6 objects. Each object will
