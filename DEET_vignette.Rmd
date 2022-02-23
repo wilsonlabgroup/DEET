@@ -182,7 +182,8 @@ DEET_out <- DEET_enrich(geneList, DEET_dataset = DEET_example_data, ordered =FAL
 
 ```
 
-#### Outputs
+
+##### Differences in output between the inputted gene list types
 
 The output of these three comparisons will be comparable, however the correlation variable is of note when the input gene set is just a list of genes.
 
@@ -190,4 +191,17 @@ When the gene set is ordered, a Spearman's correlation is interpretable, as it i
 
 If the gene list is unordered, correlation analysis is entirely uninterpretable and is not run. You are given this message: `Input gene list is considered UNORDERED: Correlation analysis will not be run and pathway enrichment will be unordered.`
 
-Since it not run there is nothing significant, and the output is `No studies significantly correlate to your gene list.`
+Since it not run the output is `No variance in coefs. Cannot proceed with correlation.`
+
+#### Outputs
+
+Named list where each element contains 6 objects. Each object will contain the results (enrichment or correlation) and corresponding metadata.
+
+* AP_INPUT_BP_output - Enriched BPs of input gene list. This is the output of ActivePathways. Namely, it is a data table giving the ontology ID, name, FDR-adjusted p-value, ontology size, and a character vector of overlapping genes.
+* AP_INPUT_TF_output - Enriched TF of input gene list. The format is identical to `AP_INPUT_BP_output` but instead of enriched gene ontologies, there is the enriched TFs.
+* AP_DEET_DE_output  - Enriched pairwise comparisons within DEET based on overlap the researchers inputted gene list and DE genes. This object contains two elements, the first one is `results`, which is the same data.table as in `AP_INPUT_BP_output` but instead of pathways, we are enriching against DE comparisons found within DEET. The second is `metadata` which is a subset of the larger metadata dataframe that corresponds with the gene sets in `results`.
+* AP_DEET_BP_output - Enriched pairwise comparisons within DEET based on the overlap of the pathways enriched by the inputted gene list and the pathways enriched from the pairwise comparisons withing DEET. The format is the same as `AP_DEET_DE_output` where pathway gene ontology term names are in the place of DE gene names.
+* AP_DEET_TF_output - Enriched pairwise comparisons within DEET based on the overlap of the transcription factors enriched by the inputted gene list and the pathways enriched from the pairwise comparisons withing DEET. The format is the same as `AP_DEET_DE_output` where pathway gene transcription factor term names are in the place of DE gene names.
+* DE_correlations - A list containing three objects. The first objects, `results` is a data frame where the rows are different pairwise comparisons and the columns are the ouput of the correlational analysis between overlapping genes. Columns are the DEET ID and DEET name, the pearson/spearman's correlation coefficients, as well as their raw and FDR adjusted p-values. The `metadata` object are the subsetted rows from the metadata data frame that align with the studies containing significant correlations. Lastly, the `distributions` object is a list where each element is a diffierent significantly associated pairwise comparisons. Each element is populated by a dataframe where rows are genes significant in at least one study, columns are the coefficients from the input study and DEET, and colour designates whether the gene is DE in one study (grey), both studies in the same direction (purple) and both studies in the opposite direction (orange).
+
+### DEET_feature_extract
