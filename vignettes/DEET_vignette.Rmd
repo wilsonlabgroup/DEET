@@ -1,14 +1,14 @@
 ---
-  title: "Differential Expression Enrichment Tool (DEET)"
+title: "Differential Expression Enrichment Tool (DEET)"
 author: "Dustin Sokolowski"
 date: "`r Sys.Date()`"
 output: 
   rmarkdown:::html_vignette:
-  toc: true
+    toc: true
 vignette: >
   %\VignetteIndexEntry{Differential Expression Enrichment Tool (DEET)}
-%\VignetteEncoding{UTF-8}
-%\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
 ---
   
 ## Install and load DEET
