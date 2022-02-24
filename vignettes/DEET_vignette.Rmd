@@ -171,7 +171,7 @@ DEET_out <- DEET_enrich(geneList, DEET_dataset = DEET_example_data, ordered = TR
 
 ##### Running DEET with an unordered gene list
 
-```{r DEET_enrich_ordered, eval=FALSE}
+```{r DEET_enrich_unordered, eval=FALSE}
 
 data("example_DEET_enrich_input")
 data("DEET_example_data")
