@@ -25,12 +25,12 @@ against the response variable based on if it's continuous, categorical, or
 binomial in nature.
 
 \itemize{
-\item elastic_net_coefficients - Association that a gene has with the
-response variable based on the elastic net regression.
-\item elastic_net - Output of the elastic net regression
-\item - basic_features gives the output of the
-correlation, ANOVA, and wilcoxon test of every gene against the
-response variable.
+  \item elastic_net_coefficients - Association that a gene has with the
+  response variable based on the elastic net regression.
+  \item elastic_net - Output of the elastic net regression
+  \item - basic_features gives the output of the
+  correlation, ANOVA, and wilcoxon test of every gene against the
+  response variable.
 }
 }
 \description{

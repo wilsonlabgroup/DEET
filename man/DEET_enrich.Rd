@@ -27,15 +27,15 @@ possible genes. Default value is NULL.}
 Named list where each element contains 6 objects. Each object will
 contain the results (enrichment or correlation) and corresponding metadata.
 \itemize{
-\item AP_INPUT_BP_output - Enriched BPs of input gene list.
-\item AP_INPUT_TF_output - Enriched TFs of input gene list.
-\item AP_DEET_DE_output  - Enrichment of input gene list on DEETs studies.
-\item AP_DEET_BP_output  - Enrichment of BPs of input gene list on DEETs
-BPs of studies.
-\item AP_DEET_TF_output  - Enrichment of TFs of input gene list on DEETs
-TFs of studies.
-\item DE_correlations    - Correlation values of input gene list to DEETs
-studies (both Pearson and Spearman).
+  \item AP_INPUT_BP_output - Enriched BPs of input gene list.
+  \item AP_INPUT_TF_output - Enriched TFs of input gene list.
+  \item AP_DEET_DE_output  - Enrichment of input gene list on DEETs studies.
+  \item AP_DEET_BP_output  - Enrichment of BPs of input gene list on DEETs
+  BPs of studies.
+  \item AP_DEET_TF_output  - Enrichment of TFs of input gene list on DEETs
+  TFs of studies.
+  \item DE_correlations    - Correlation values of input gene list to DEETs
+  studies (both Pearson and Spearman).
 }
 }
 \description{

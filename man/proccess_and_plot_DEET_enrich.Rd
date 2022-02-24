@@ -43,17 +43,17 @@ the enrichment tests within DEET. The final element is the output of ActivePathw
 (in DEET) that is directly compatible with the DEET_enrichment_barplot function.
 
 \itemize{
-\item DEET_DotPlot - ggplot object of Dotplot of enrichment of enrichment of DEET studies
-based on DE, BP, and TF information. Only plotted if 2/3 levels contain
-at least one significant study.
-\item Pathway_barplot - ggplot object of Barplot of standard gene set enrichment based on
-gene ontology and TFs. Only plotted if there is at least one enriched
-significant pathway/TF.
-\item individual_barplot - ggplot object of Barplot of the top enriched pathways or studies
-(depending on the input list).Barplot is only generated if each list has at least one pathway (or study)
-is enriched.
-\item DEET_output_forplotting - output of Activepathways with "domain", "overlap.size", and "p.value"
-columns added to be compatible with the DEET_enrichment_barplot function.
+  \item DEET_DotPlot - ggplot object of Dotplot of enrichment of enrichment of DEET studies
+  based on DE, BP, and TF information. Only plotted if 2/3 levels contain
+  at least one significant study.
+  \item Pathway_barplot - ggplot object of Barplot of standard gene set enrichment based on
+  gene ontology and TFs. Only plotted if there is at least one enriched
+  significant pathway/TF.
+  \item individual_barplot - ggplot object of Barplot of the top enriched pathways or studies
+  (depending on the input list).Barplot is only generated if each list has at least one pathway (or study)
+  is enriched.
+  \item DEET_output_forplotting - output of Activepathways with "domain", "overlap.size", and "p.value"
+  columns added to be compatible with the DEET_enrichment_barplot function.
 
 }
 }

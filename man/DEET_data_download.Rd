@@ -16,37 +16,37 @@ DEET_feature_extract or DEET_enrich. The metadata within DEET
 can also be downloaded.
 
 \itemize{
-\item feature_matrix - A gene by comparison matrix populated
-with the log2FC of gene expression for the genes that are
-considered DE within the study (padj < 0.05).
-\item metadata - a comparison - by - explanatory piece of data dataframe
-providing important details to contextualize each study.
-For every pairwise comparison, the study name,
-source (SRA, TCGA, GTEx and SRA-manual),
-description from the DRA compendium,
-the number of samples (total, up-condition,
-and down-condition), samples (total ,up-condition, down-condition),
-tissue (including tumour from TCGA),
-number of DEs (total, up-condition, down-condition),
-age (mean +- sd), sex, top 15 DEGs - up, top 15 DEGs - down,
-top 5 enriched pathways, and top 5 enriched TFs.
-PMID are also available for studies selected from SRA.
-Lastly, each pairwise comparison was given an overall
-category based on those decided in Crow et al., 2019.
-\item DEET_enrich - A named list of seven objects containing
-the data frames summarizing the DEGs from comparisons within
-DEET, GMT objects of comparisons within DEET for enrichment
-through ActivePathways, GMT objects for basic pathway and TF
-enrichment, and a dataframe for the metadata of each study.
-For more detail on each element of the list, please consult
-the vignette or "?DEET_example_data", as it is a subset
-of this object
+  \item feature_matrix - A gene by comparison matrix populated
+  with the log2FC of gene expression for the genes that are
+  considered DE within the study (padj < 0.05).
+  \item metadata - a comparison - by - explanatory piece of data dataframe
+   providing important details to contextualize each study.
+   For every pairwise comparison, the study name,
+   source (SRA, TCGA, GTEx and SRA-manual),
+   description from the DRA compendium,
+   the number of samples (total, up-condition,
+   and down-condition), samples (total ,up-condition, down-condition),
+   tissue (including tumour from TCGA),
+   number of DEs (total, up-condition, down-condition),
+   age (mean +- sd), sex, top 15 DEGs - up, top 15 DEGs - down,
+   top 5 enriched pathways, and top 5 enriched TFs.
+   PMID are also available for studies selected from SRA.
+   Lastly, each pairwise comparison was given an overall
+   category based on those decided in Crow et al., 2019.
+  \item DEET_enrich - A named list of seven objects containing
+   the data frames summarizing the DEGs from comparisons within
+   DEET, GMT objects of comparisons within DEET for enrichment
+   through ActivePathways, GMT objects for basic pathway and TF
+   enrichment, and a dataframe for the metadata of each study.
+   For more detail on each element of the list, please consult
+   the vignette or "?DEET_example_data", as it is a subset
+   of this object
 }
 }
 \description{
 Function to automatically download the files within
 the DEET database that are required for the DEET_enrich
-and DEET_feature_extractfunctions.
+ and DEET_feature_extractfunctions.
 }
 \examples{
 \donttest{
