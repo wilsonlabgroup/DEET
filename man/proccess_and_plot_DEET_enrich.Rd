@@ -13,7 +13,6 @@ proccess_and_plot_DEET_enrich(
   ol_size = 1,
   exclude_domain = "",
   cluster_order = NULL,
-  dot = F,
   colors = "Set2"
 )
 }
@@ -35,8 +34,6 @@ A list with all of the same names as DEET_output}
 the user happened to aggregate the results into a single DF, generally unused.}
 
 \item{cluster_order}{Factor to group studies based on the researchers custom annotation.}
-
-\item{dot}{logical (T/F) of whether to produce a dotplot or a barplot}
 
 \item{colors}{Type of color pallete to input into 'scale_fill_brewer' of ggplot.}
 }

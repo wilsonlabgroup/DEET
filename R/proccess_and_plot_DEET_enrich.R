@@ -13,7 +13,6 @@
 #' @param exclude_domain Exclude studies enriched based on DEGs, Paths, or TF if
 #'  the user happened to aggregate the results into a single DF, generally unused.
 #' @param cluster_order Factor to group studies based on the researchers custom annotation.
-#' @param dot logical (T/F) of whether to produce a dotplot or a barplot
 #' @param colors Type of color pallete to input into 'scale_fill_brewer' of ggplot.
 #'
 #' @return Named list where each element is a ggplot object plotting the output of
@@ -50,7 +49,7 @@
 #' @export
 #' @importFrom utils data
 #'
-proccess_and_plot_DEET_enrich <- function(DEET_output, width=8, text_angle=0, horizontal =F, topn=5, ol_size=1, exclude_domain="", cluster_order=NULL, dot=F, colors = "Set2") {
+proccess_and_plot_DEET_enrich <- function(DEET_output, width=8, text_angle=0, horizontal =F, topn=5, ol_size=1, exclude_domain="", cluster_order=NULL, colors = "Set2") {
 
   message("Removing DE_correlations element from output")
   DEET_output <- DEET_output[names(DEET_output) != "DE_correlations"]
@@ -85,12 +84,12 @@ proccess_and_plot_DEET_enrich <- function(DEET_output, width=8, text_angle=0, ho
 message("Genarating batplot of traditional pathway enrichments")
 each_barplot <- list()
 for(i in names(DEET_plot_processed)) {
-  each_barplot[[i]] <- DEET_enrichment_plot(DEET_plot_processed[i], i, width=width, text_angle=text_angle, horizontal =horizontal, topn=topn, ol_size = ol_size, exclude_domain = exclude_domain, cluster_order=cluster_order, dot=dot, colors = colors)
+  each_barplot[[i]] <- DEET_enrichment_plot(DEET_plot_processed[i], i, width=width, text_angle=text_angle, horizontal =horizontal, topn=topn, ol_size = ol_size, exclude_domain = exclude_domain, cluster_order=cluster_order, dot=FALSE, colors = colors)
 }
 
 message("Genarating barplot of pathway enrichment (BP + TF) if available")
 if(length(grep("INPUT", names(DEET_plot_processed))) == 2) {
-  Traditional_Barplot <- DEET_enrichment_plot(DEET_plot_processed[grep("INPUT", names(DEET_plot_processed))], "Pathway_Enrichment", width=width, text_angle=text_angle, horizontal =horizontal, topn=topn, ol_size = ol_size, exclude_domain = exclude_domain, cluster_order=cluster_order, dot=dot, colors = colors)
+  Traditional_Barplot <- DEET_enrichment_plot(DEET_plot_processed[grep("INPUT", names(DEET_plot_processed))], "Pathway_Enrichment", width=width, text_angle=text_angle, horizontal =horizontal, topn=topn, ol_size = ol_size, exclude_domain = exclude_domain, cluster_order=cluster_order, dot=FALSE, colors = colors)
 } else {
   Traditional_Barplot <- "There was not significant enrichment of at least one gene set from both BPs or TFs, please see individual_barplot for results."
 }

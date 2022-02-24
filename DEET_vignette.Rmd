@@ -235,6 +235,156 @@ DEET feature extract outputs a list of three objects.
 
 ### Plotting the outputs of DEET_enrich.
 
+#### Barplots of enrichement
+
+The `proccess_and_plot_DEET_enrich()` function is a wrapper that generates barplots and a dot plot of enrichment for all of the individual outputs of `DEET_enrich()` (not the correlations). The outputs are in ggplot2 objects, allowing users to further modify the plots or print however they like.
+
+#### Inputs
+
+* DEET_output - The direct output of `DEET_enrich()` a named list with the ActivePathways enrichment from each data type. If there wasn't enrichment of a certain datatype (e.g. AP_DEET_BP_output) the function runs properly but it is not plotted. 
+
+The remaining varables are for graphical parameters that are passed into the `DEET_enrichment_plot()` function.
+
+* width	- The number of inches in the barplot or dotplot.
+* text_angle - The angle of the enriched studies.
+* horizontal - Whether the output barplot is vertical or horizontal
+* topn - the top number of studies (by p-value) to be plotted.
+* ol_size	- the minimum number of overlapping genes (or paths) in an enriched study.
+* exclude_domain - Exclude studies enriched based on DEGs, Paths, or TF if the user happened to aggregate the results into a single DF, generally unused.
+* cluster_order - Factor to group studies based on the researchers custom annotation.
+* colors - Type of color pallete to input into 'scale_fill_brewer' of ggplot.
+
+#### Examples
+
+```{r proccess_and_plot_DEET_enrich_main, eval=FALSE}
+
+data("example_DEET_enrich_input")
+data("DEET_example_data")
+DEET_out <- DEET_enrich(example_DEET_enrich_input, DEET_dataset = DEET_example_data)
+plotting_example <- proccess_and_plot_DEET_enrich(DEET_out, text_angle = 45,
+horizontal = TRUE, topn=4)
+
+```
+
+Another example Where `AP_DEET_BP_output` is not significant, to show the plotting function still works.
+
+```{r proccess_and_plot_DEET_enrich_miss, eval=FALSE}
+
+data("example_DEET_enrich_input")
+data("DEET_example_data")
+DEET_out <- DEET_enrich(example_DEET_enrich_input, DEET_dataset = DEET_example_data)
+DEET_out$AP_DEET_DE_output <- "No enrichment to be plotted"
+plotting_example <- proccess_and_plot_DEET_enrich(DEET_out, text_angle = 45,
+horizontal = TRUE, topn=4)
+
+```
+
+### Outputs
+
+There are up to four outputs assuming everything is significant, each output is a list or a ggplot object.
+
+* DEET_Dotplot - an object of class ggplot priting the dotplot of enrichment from DEET using the DE, BP, and TF information.
+* Pathway Barplot - An object of class ggplot printing the barplots of traditional pathway enrichment using ActivePathwys.
+* individual_barplot - A list of ggplot2 objects showing the enrichment of every gene set (i.e., every enrichment output from `DEET_enrich()`).
+* DEET_output_forplotting - A list of dataframes that are directly compatible with the `DEET_enrichment_plot`. An example of this is shown below.
+
+```{r Prep_DEET_enrichment_plot, eval=FALSE}
+
+DE_example <- DEET_out$AP_DEET_DE_output$results
+
+# Changes for DEET_example_plot
+DE_example$term.name <- DEET_out$AP_DEET_DE_output$metadata$DEET.Name
+DE_example$domain <- "DE"
+DE_example$overlap.size <- lengths(DE_example$overlap)
+DE_example$p.value <- DE_example$adjusted.p.val
+
+DE_example_plot <- DEET_enrichment_plot(list(DE_example = DE_example), "DE_example")
+
+
+```
+
+As shown above, from here you can also just use `DEET_enrichment_plot` directly to have some more control over these plots.
+
+#### Scatterplots of correlations for DEET enrichment
+
+This function also takes the direct output from `DEET_enrich`  and generates scatterplots of the correlations of studies whose log2FCs are significantly correlated with the input DE list.
+
+#### Input
+
+correlation_input - The `DE_correlations` object that is the output of the `DEET_enrich` function. It only works if there was at least one study that was significantly correlated.
+
+#### Examples 
+
+```{r correlation_plots, eval=FALSE}
+
+data("example_DEET_enrich_input")
+data("DEET_example_data")
+DEET_out <- DEET_enrich(example_DEET_enrich_input, DEET_dataset = DEET_example_data)
+correlation_input <- DEET_out$DE_correlations
+correlation_plots <- DEET_plot_correlation(correlation_input)
+
+```
+
+#### Outputs
+
+* A list of ggplot objects showing the scatterplot between the coefs of the inputted DE list and the correlated study within DEET. The X axis shows the correlation coefficient, the Y axis shows the name of the enriched study, and the coloured points are genes that are DE in both studies.
+
+### Using DEET gene lists with other studies and enriching two input lists simultaneously.
+
+As mentioned previously, the genesets within DEET are easily transferrable to other gene set enrichment datasets. 
+
+#### Saving DEET gene set for GSEA, gprofiler, etc.
+
+One option is to download the *gmt files diretly from our ftp. `http://wilsonlab.org/public/DEET_data/DEET_DE.gmt` Is directly compatible with these tools.
+
+The other option would be to save the downloaded DEET gmt as a gmt file. This is completed using the ActivePathways R package. Instead of using the example data as shown below, please use the full dataset.
+
+Instead of saving to a temporary directory like in this vignette, save the file wherever you want the directory to be saved.
+
+```{r DEET_gmt_save, eval=FALSE}
+
+DEET_gmt <- DEET_example_data$DEET_gmt_DE
+message(paste0("DEET_gmt is an object of class gmt?: ",ActivePathways::is.GMT(DEET_gmt) ))
+
+ActivePathways::write.GMT(DEET_gmt, file = paste0(tempdir(),"/DEET_DEs.gmt"))
+
+
+```
+
+#### Enriching two gene sets simultaneously.
+
+If you have two dependent gene lists to input into DEET, you can use ActivePathways directly to find combind DEET-comparison enrichment of the two gene sets.
+
+```{r ActivePathways_Direct, eval=FALSE}
+
+set.seed(1234) # as I sample p-values to make the toy example
 
 
 
+# For example two, I had the same genes but I shuffled the p-value 
+
+example_DEET_enrich_input$padj2 <- sample(example_DEET_enrich_input$padj, length(example_DEET_enrich_input$padj), replace = FALSE)
+
+# Make a gene-by-input-list matrix of the adjusted p-values from your multiple gene sets
+
+AP_matrix <- as.matrix(example_DEET_enrich_input[,c("padj", "padj2")])
+
+# Run activepathways on the combined matrix.
+
+# Get gmt file, again from the whole list:
+
+DEET_gmt <- DEET_example_data$DEET_gmt_DE
+
+head(AP_matrix)
+
+AP_example_out <- ActivePathways::ActivePathways(scores=AP_matrix, gmt=DEET_gmt, geneset.filter = c(5,10000),correction.method = "fdr")
+
+
+
+```
+
+#### Outputs
+
+The outputs of using `ActivePathways` are the same as `DEET_enrich()` but with a couple extra columns. 
+* evidence: Whether the DEET comparison is enriched because of one gene list, both gene lists, or an integrated version of these gene lists
+* Genes_`colname`: The genes that contributed to enrichment from each inputted gene list.
