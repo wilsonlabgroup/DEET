@@ -10,8 +10,8 @@ Authors@R:
            family = "Ahn",
            role = "aut"))
 Maintainer: Dustin Sokolowski <dustin.sokolowski@sickkids.ca>
-Description: A bioinformatics R package for comparing a list of human genes to 
-    published RNA-Seq studies containing similar differentially expressed genes.
+Description: A bio informatics R package for comparing a list of human genes to 
+    published RNA-Seq studies containing similar DE genes.
 Depends: R (>= 3.5.0)
 Imports: 
   ActivePathways,

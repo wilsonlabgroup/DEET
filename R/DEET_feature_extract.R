@@ -138,7 +138,7 @@ if(datatype == "binomial") {
 
 tst1_coef <- glmnet::coef.glmnet(tst1,s=0.1)
 
-if(class( tst1_coef)== "list") { # This will be for binomial or gaussian methods
+if(is.list(tst1_coef)) { # This will be for binomial or gaussian methods
   getCoefs <- list()
   for(i in unique(response)) {
     RM <- apply(tst1_coef[[i]],1,mean)
