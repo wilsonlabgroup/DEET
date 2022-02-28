@@ -60,16 +60,16 @@ if(nrow(correlation_input$results) < 1) {
     name <- rep("", nrow(plts))
     name[plts$color != "grey"] <- rownames(plts)[plts$color != "grey"]
     plts$label <- name
-    plts$color <- as.factor(plts$color)
+    plts$color <- plts$color
     ttl <- metaColumn[i,"DEET.Name"][[1]]
     cor_out <- correlation_input$results[i,]
     cor_out1 <- cor_out[i,"Spear"]
     corLab <- round(cor_out1,3)
 
     p <- ggplot2::ggplot(plts, ggplot2::aes(x=input, y=DEET, color=color, label=label)) + ggplot2::geom_point() +
-      ggplot2::scale_color_manual(values=c("grey", "orange", "purple")) +
+      ggplot2::scale_color_manual(values=sort(unique(plts$color))) +
       ggrepel::geom_text_repel(size=2,max.overlaps = 30) + ggplot2::theme_bw() +
-      ggplot2::xlab(paste0("Input coefficient Rho: ", corLab)) + ggplot2::ylab(paste0("DEET-",ttl)) + ggplot2::theme(axis.title.y = ggplot2::element_text(size = 8))
+      ggplot2::xlab(paste0("Input coefficient Rho: ", corLab)) + ggplot2::ylab(paste0("DEET-",ttl)) + ggplot2::theme(axis.title.y = ggplot2::element_text(size = 8), legend.position = "none")
 
     output_plots[[i]] <- p
 
