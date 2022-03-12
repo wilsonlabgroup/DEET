@@ -437,13 +437,22 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
     DE_correlations <- list(results = cor_results_sig,
                             distributions = cor_mats_sig,
                             metadata = meta_match)
-  } else{
-    if(cor_results_sig == "No variance in coefs. Cannot proceed with correlation.") {
-      DE_correlations <- "No variance in coefs. Cannot proceed with correlation."
-    } else {
+  } else {
+
+    if(is.data.frame(cor_results_sig)) {
       DE_correlations <- "No studies significantly correlate to your gene list."
 
+    } else {
+      noinput <- cor_results_sig == "No variance in coefs. Cannot proceed with correlation."
+      if(noinput) {
+        DE_correlations <- "No variance in coefs. Cannot proceed with correlation."
+
+      } else {
+        warning("Correlations were not run despite there being variance in coefficients. Check input.")
+        DE_correlations <- "Correlations were not run despite there being variance in coefficients. Check input."
+      }
     }
+
     warning(DE_correlations)
   }
 
