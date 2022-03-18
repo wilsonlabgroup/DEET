@@ -9,12 +9,12 @@ DEET_enrichment_plot(
   outname,
   width = 8,
   text_angle = 0,
-  horizontal = F,
+  horizontal = FALSE,
   topn = 5,
   ol_size = 1,
   exclude_domain = "",
   cluster_order = NULL,
-  dot = F,
+  dot = FALSE,
   colors = "Set2"
 )
 }

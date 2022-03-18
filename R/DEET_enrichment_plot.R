@@ -47,10 +47,11 @@
 #'
 
 
-DEET_enrichment_plot <- function(enrich_list, outname, width=8, text_angle=0, horizontal =F, topn=5, ol_size=1, exclude_domain="", cluster_order=NULL, dot=F, colors = "Set2"){
+DEET_enrichment_plot <- function(enrich_list, outname, width=8, text_angle=0, horizontal =FALSE, topn=5, ol_size=1, exclude_domain="", cluster_order=NULL, dot=FALSE, colors = "Set2"){
 
   #empty variables to deal with column-name note fo dplyr
   n <- cluster <- domain <- p.value <- overlap.size <- term.id <- term.name <- ""
+
 
   # Internal functions used
   count_intersection <- function(x){
@@ -122,7 +123,7 @@ DEET_enrichment_plot <- function(enrich_list, outname, width=8, text_angle=0, ho
   p <- p +
     ggplot2::facet_grid(cluster~., scales = "free", space = "free") +
     ggplot2::theme(strip.text.y = ggplot2::element_text(angle=text_angle))
-  if(horizontal){
+  if(horizontal & !(dot)){
     used_data <- subset(plotdata_all, `term.id` %in% plotdata$term.id)
     used_data <-  dplyr::arrange(used_data, dplyr::desc(domain),-p.value, cluster)
     idorder <- c(1:length(unique(used_data$term.name)))
@@ -139,17 +140,35 @@ DEET_enrichment_plot <- function(enrich_list, outname, width=8, text_angle=0, ho
             axis.text.x =  ggplot2::element_text(angle=text_angle)) +
       ggplot2::facet_grid(~cluster, scales = "free_x") +
       ggplot2::scale_fill_brewer(palette = colors)
+    }
     if(dot){
       # make the dotplot
+      used_data <- subset(plotdata_all, `term.id` %in% plotdata$term.id)
+      used_data <-  dplyr::arrange(used_data, dplyr::desc(domain),-p.value, cluster)
+      idorder <- c(1:length(unique(used_data$term.name)))
+      names(idorder) <- unique(used_data$term.name)
+      used_data$order <- idorder[used_data$term.name]
+      used_data$term.name <- factor(used_data$term.name, levels = unique(used_data$term.name))
+      if(horizontal) {
       p <-  ggplot2::ggplot(used_data) +
         ggplot2::geom_point( ggplot2::aes(x=`term.name`, y=cluster, size=-log10(p.value), color=domain)) +
-        ggplot2::coord_flip() +
         ggplot2::scale_color_brewer(palette = colors) +
         ggplot2::theme_bw() +
+        ggplot2::coord_flip() +
         ggplot2::theme(axis.text =  ggplot2::element_text(color="black", size=10),
               axis.text.x =  ggplot2::element_text(angle=text_angle))
+      } else {
+        p <-  ggplot2::ggplot(used_data) +
+          ggplot2::geom_point( ggplot2::aes(x=`term.name`, y=cluster, size=-log10(p.value), color=domain)) +
+          ggplot2::scale_color_brewer(palette = colors) +
+          ggplot2::theme_bw() +
+          ggplot2::theme(axis.text =  ggplot2::element_text(color="black", size=10),
+                         axis.text.x =  ggplot2::element_text(angle=text_angle + 90))
+      }
+
+
     }
-  }
+
   #print(p)
   #dev.off()
   return(p)
