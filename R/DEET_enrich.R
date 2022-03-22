@@ -392,11 +392,17 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
   # Generate function output elements by matching metadata to results.
 
   # 3) AP_DEET_DE_output
-  if ((( "data.table" %in% class(AP_DEET_DE_sig))[1]  & nrow(AP_DEET_DE_sig) > 0)[1]){
+  if (( "data.table" %in% class(AP_DEET_DE_sig))[1]){
+    if(nrow(AP_DEET_DE_sig) > 0 ) {
     meta_match <- DEET_metadata[AP_DEET_DE_sig$term.id, ]
 
     AP_DEET_DE_output <- list(results = AP_DEET_DE_sig,
                               metadata = meta_match)
+    } else {
+      AP_DEET_DE_output <- paste("Your gene list did not significantly enrich",
+                                 "any studies.")
+      warning(AP_DEET_DE_output)
+    }
   } else{
     AP_DEET_DE_output <- paste("Your gene list did not significantly enrich",
                                "any studies.")
@@ -404,11 +410,19 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
   }
 
   # 4) AP_DEET_BP_output
-  if ((( "data.table" %in% class(AP_DEET_BP_sig))[1]  & nrow(AP_DEET_BP_sig) > 0)[1]){
+  if (( "data.table" %in% class(AP_DEET_BP_sig))[1] ){
+
+    if((nrow(AP_DEET_BP_sig) > 0)[1]) {
     meta_match <- DEET_metadata[AP_DEET_BP_sig$term.id, ]
 
     AP_DEET_BP_output <- list(results = AP_DEET_BP_sig,
                               metadata = meta_match)
+    } else {
+      AP_DEET_BP_output <- paste("Your gene list converted to BP enrichment did",
+                                 "not significantly enrich any studies.")
+      warning(AP_DEET_BP_output)
+    }
+
   } else{
     AP_DEET_BP_output <- paste("Your gene list converted to BP enrichment did",
                                "not significantly enrich any studies.")
@@ -416,12 +430,19 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
   }
 
   # 5) AP_DEET_TF_output
-  if ((( "data.table" %in% class(AP_DEET_TF_sig))[1]  & nrow(AP_DEET_TF_sig) > 0)[1]){
 
+  if (( "data.table" %in% class(AP_DEET_TF_sig) )[1]){
+
+    if((nrow(AP_DEET_TF_sig) > 0)[1] ) {
     meta_match <- DEET_metadata[AP_DEET_TF_sig$term.id, ]
 
     AP_DEET_TF_output <- list(results = AP_DEET_TF_sig,
                               metadata = meta_match)
+    } else {
+      AP_DEET_TF_output <- paste("Your gene list converted to TF enrichment did",
+                                 "not significantly enrich any studies.")
+      warning(AP_DEET_TF_output)
+    }
   } else{
     AP_DEET_TF_output <- paste("Your gene list converted to TF enrichment did",
                                "not significantly enrich any studies.")
