@@ -54,6 +54,10 @@ proccess_and_plot_DEET_enrich <- function(DEET_output, width=8, text_angle=0, ho
   message("Removing DE_correlations element from output")
   DEET_output <- DEET_output[names(DEET_output) != "DE_correlations"]
 
+  message("Removing non-significant DE lists")
+
+  DEET_ouput <- DEET_ouput[!("character" == unname(unlist(lapply(DEET_ouput,class))))]
+
   DEET_plot_processed <- list()
   for(i in names(DEET_output)) {
     DEET_list <- DEET_output[[i]]
@@ -61,6 +65,13 @@ proccess_and_plot_DEET_enrich <- function(DEET_output, width=8, text_angle=0, ho
       message(paste0("No significant results for ",i, " were detected and therefore cannot be plotted"))
 
     } else {
+      if(grepl("AP_INPUT_",i)) {
+        if((nrow(DEET_list) == 0)[1] ) {
+          message(paste0("No significant results for ",i, " were detected and therefore cannot be plotted"))
+          next
+        }
+      }
+
       domain <- gsub("AP_","",i)
       domain <- gsub("_output","",i)
       if(grepl("AP_INPUT",i)) {
