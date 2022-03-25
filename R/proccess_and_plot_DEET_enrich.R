@@ -56,7 +56,7 @@ proccess_and_plot_DEET_enrich <- function(DEET_output, width=8, text_angle=0, ho
 
   message("Removing non-significant DE lists")
 
-  DEET_ouput <- DEET_ouput[!("character" == unname(unlist(lapply(DEET_ouput,class))))]
+  DEET_output <- DEET_output[!("character" == unname(unlist(lapply(DEET_output,class))))]
 
   DEET_plot_processed <- list()
   for(i in names(DEET_output)) {
