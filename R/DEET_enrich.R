@@ -211,6 +211,7 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
   DEET_gmt_TF <- DEET_dataset$DEET_gmt_TF
   DEET_gmt_DE <- DEET_dataset$DEET_gmt_DE
   DEET_metadata <- DEET_dataset$DEET_metadata
+  rownames(DEET_metadata) <- DEET_metadata$DEET.ID
   gmt_BP <- DEET_dataset$gmt_BP
   gmt_TF <- DEET_dataset$gmt_TF
 
