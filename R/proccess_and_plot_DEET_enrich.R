@@ -80,6 +80,7 @@ proccess_and_plot_DEET_enrich <- function(DEET_output,colour_barplot = "Source",
 
       domain <- gsub("AP_","",i)
       domain <- gsub("_output","",i)
+      domain1 <- domain
       if(grepl("AP_INPUT",i)) {
         DEET_list$domain <- domain
         DEET_list$overlap.size <- lengths(DEET_list$overlap)
@@ -105,7 +106,7 @@ proccess_and_plot_DEET_enrich <- function(DEET_output,colour_barplot = "Source",
         DEET_list$domain <- domain
         DEET_list$overlap.size <- lengths(DEET_list$overlap)
         DEET_list$p.value <- DEET_list$adjusted.p.val
-        DEET_plot_processed[[domain]] <- DEET_list
+        DEET_plot_processed[[domain1]] <- DEET_list
       }
     }
   }
@@ -129,7 +130,7 @@ if(length(grep("_DEET_", names(DEET_plot_processed))) > 1) {
   tmp <- DEET_plot_processed[grep("_DEET_", names(DEET_plot_processed))]
   for(i in names(tmp)) {
     tmp1 <- tmp[[i]]
-    tmp1$domain <- "DEET"
+    #tmp1$domain <- "DEET"
     tmp[[i]] <- tmp1
   }
   DEET_DotPlot <- DEET_enrichment_plot(tmp, "DEET_Enrichment", width=width, text_angle=text_angle, horizontal =TRUE, topn=topn, ol_size = ol_size, exclude_domain = exclude_domain, cluster_order=cluster_order, dot=TRUE, colors = colors)
