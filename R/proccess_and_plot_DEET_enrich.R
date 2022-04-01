@@ -88,7 +88,7 @@ proccess_and_plot_DEET_enrich <- function(DEET_output,colour_barplot = "Source",
       } else {
         DEET_out <- DEET_output[[i]]
         DEET_list <- DEET_out$results
-        DEET_metadata <- DEET_out$AP_DEET_DE_output$metadata
+        DEET_metadata <- DEET_out$metadata
 
         if(!is.null(colour_barplot)) {
 
