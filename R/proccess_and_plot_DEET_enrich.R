@@ -4,7 +4,11 @@
 #' the DEET_enrich function.
 #'
 #' @param DEET_output Direct output of the DEET_enrich function.
-#' A list with all of the same names as DEET_output
+#' A list with all of the same names as DEET_output.
+#' @param colour_barplot Pick dotplot or barplot colours.
+#' It can be NULL, in which all bars are the same or it can
+#' be a (case sensitive) column within the metadata. Defaults
+#' to "source".
 #' @param width The number of inches in the barplot or dotplot.
 #' @param text_angle The angle of the enriched studies.
 #' @param horizontal Whether the output barplot is vertical or horizontal
@@ -49,7 +53,7 @@
 #' @export
 #' @importFrom utils data
 #'
-proccess_and_plot_DEET_enrich <- function(DEET_output, width=8, text_angle=0, horizontal =F, topn=5, ol_size=1, exclude_domain="", cluster_order=NULL, colors = "Set2") {
+proccess_and_plot_DEET_enrich <- function(DEET_output,colour_barplot = "Source", width=8, text_angle=0, horizontal =F, topn=5, ol_size=1, exclude_domain="", cluster_order=NULL, colors = "Set2") {
 
   message("Removing DE_correlations element from output")
   DEET_output <- DEET_output[names(DEET_output) != "DE_correlations"]
@@ -84,6 +88,19 @@ proccess_and_plot_DEET_enrich <- function(DEET_output, width=8, text_angle=0, ho
       } else {
         DEET_out <- DEET_output[[i]]
         DEET_list <- DEET_out$results
+        DEET_metadata <- DEET_out$AP_DEET_DE_output$metadata
+
+        if(!is.null(colour_barplot)) {
+
+        outMeta <- !(colour_barplot %in% colnames(DEET_metadata)[1])
+        if(outMeta) {
+          stop("'colour_barplot' variable is not in DEET's metadata (case sensitive). If you need custom colours then use 'DEET_enrichment_plot()' with a custom 'domain' value. ")
+        }
+
+        domain <- DEET_metadata[,colour_barplot]
+
+        }
+
         DEET_list$term.name <- DEET_out$metadata$DEET.Name
         DEET_list$domain <- domain
         DEET_list$overlap.size <- lengths(DEET_list$overlap)

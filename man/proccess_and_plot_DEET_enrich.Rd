@@ -6,6 +6,7 @@
 \usage{
 proccess_and_plot_DEET_enrich(
   DEET_output,
+  colour_barplot = "Source",
   width = 8,
   text_angle = 0,
   horizontal = F,
@@ -18,7 +19,12 @@ proccess_and_plot_DEET_enrich(
 }
 \arguments{
 \item{DEET_output}{Direct output of the DEET_enrich function.
-A list with all of the same names as DEET_output}
+A list with all of the same names as DEET_output.}
+
+\item{colour_barplot}{Pick dotplot or barplot colours.
+It can be NULL, in which all bars are the same or it can
+be a (case sensitive) column within the metadata. Defaults
+to "source".}
 
 \item{width}{The number of inches in the barplot or dotplot.}
 
