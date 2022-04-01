@@ -92,7 +92,7 @@ proccess_and_plot_DEET_enrich <- function(DEET_output,colour_barplot = "Source",
 
         if(!is.null(colour_barplot)) {
 
-        outMeta <- !(colour_barplot %in% colnames(DEET_metadata)[1])
+        outMeta <- !(colour_barplot %in% colnames(DEET_metadata))[1]
         if(outMeta) {
           stop("'colour_barplot' variable is not in DEET's metadata (case sensitive). If you need custom colours then use 'DEET_enrichment_plot()' with a custom 'domain' value. ")
         }
