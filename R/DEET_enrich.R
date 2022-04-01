@@ -279,7 +279,17 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
                                                cutoff = 0.05)
   AP_DEET_DE_sig <- AP_DEET_DE[AP_DEET_DE$adjusted.p.val < 0.05, ]
 
+  # If nothing was enirched at this point
+  if(sum(nrow(AP_DEET_DE_sig), nrow(AP_INPUT_BP_output), nrow(AP_INPUT_TF_output)) == 0) {
+    warning("Basic pathway enrichment and DEET all yeiled0 signficant pathwys, TF motifs, and studies. Check input if you think there should be some enrichment.")
+
+    return("Basic pathway enrichment and DEET all yeiled0 signficant pathwys, TF motifs, and studies. Check input if you think there should be some enrichment.")
+  }
+
+  # If nothing is enriched -- return that statement
   # ----------------------------------------------------------------------------
+
+
 
   # 4) Find enriched BPs of input gene list on DEET’s BPs of studies.
   comp_bp <- as.matrix(AP_INPUT_BP$adjusted.p.val)

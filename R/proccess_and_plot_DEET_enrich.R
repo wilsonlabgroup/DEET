@@ -85,7 +85,7 @@ proccess_and_plot_DEET_enrich <- function(DEET_output,colour_barplot = "Source",
         DEET_list$domain <- domain
         DEET_list$overlap.size <- lengths(DEET_list$overlap)
         DEET_list$p.value <- DEET_list$adjusted.p.val
-        DEET_plot_processed[[domain]] <- DEET_list
+        DEET_plot_processed[[domain1]] <- DEET_list
       } else {
         DEET_out <- DEET_output[[i]]
         DEET_list <- DEET_out$results
