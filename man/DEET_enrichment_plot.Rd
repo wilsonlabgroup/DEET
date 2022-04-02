@@ -15,7 +15,8 @@ DEET_enrichment_plot(
   exclude_domain = "",
   cluster_order = NULL,
   dot = FALSE,
-  colors = "Set2"
+  colors = "Set2",
+  split_domain = FALSE
 )
 }
 \arguments{
@@ -42,6 +43,10 @@ the user happened to aggregate the results into a single DF, generally unused.}
 \item{dot}{logical (T/F) of whether to produce a dotplot or a barplot}
 
 \item{colors}{Type of color pallete to input into 'scale_fill_brewer' of ggplot.}
+
+\item{split_domain}{logical (T/F) of whether to plot the "topn" studies for
+each "domain" (default is source) or to plot the topn pathwys regardless of domain.
+default is set to FALSE, meaning it plots the topn pathways regardless of domain.}
 }
 \value{
 A ggplot2 object (barplot or dotplot) of enrichment identified within DEET.

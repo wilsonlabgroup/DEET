@@ -15,7 +15,9 @@
 #' @param cluster_order Factor to group studies based on the researchers custom annotation.
 #' @param dot logical (T/F) of whether to produce a dotplot or a barplot
 #' @param colors Type of color pallete to input into 'scale_fill_brewer' of ggplot.
-#'
+#' @param split_domain logical (T/F) of whether to plot the "topn" studies for
+#'  each "domain" (default is source) or to plot the topn pathwys regardless of domain.
+#'  default is set to FALSE, meaning it plots the topn pathways regardless of domain.
 #'
 #'
 #' @return A ggplot2 object (barplot or dotplot) of enrichment identified within DEET.
@@ -47,7 +49,7 @@
 #'
 
 
-DEET_enrichment_plot <- function(enrich_list, outname, width=8, text_angle=0, horizontal =FALSE, topn=5, ol_size=1, exclude_domain="", cluster_order=NULL, dot=FALSE, colors = "Set2"){
+DEET_enrichment_plot <- function(enrich_list, outname, width=8, text_angle=0, horizontal =FALSE, topn=5, ol_size=1, exclude_domain="", cluster_order=NULL, dot=FALSE, colors = "Set2", split_domain = FALSE){
 
   #empty variables to deal with column-name note fo dplyr
   n <- cluster <- domain <- p.value <- overlap.size <- term.id <- term.name <- ""
@@ -90,6 +92,7 @@ DEET_enrichment_plot <- function(enrich_list, outname, width=8, text_angle=0, ho
       x <- stats::na.omit(x[order(x$p.value),][1:min(nrow(x), topn),])
       return(x)
     }))
+
     enrich_data$term.name <- factor(enrich_data$term.name, levels=rev(unique(as.character(enrich_data$term.name))))
     enrich_data$cluster <- rep(x, nrow(enrich_data))
     return(enrich_data)
@@ -97,6 +100,15 @@ DEET_enrichment_plot <- function(enrich_list, outname, width=8, text_angle=0, ho
   # Get data for plotting together into a df
   plotdata <- do.call("rbind", enrich_data_list)
   plotdata <- process_plotdata(plotdata, exclude_domain=exclude_domain, testclusters = testclusters)
+
+  if(nrow(plotdata) > topn) {
+  if(!split_domain) {
+
+    plotdata <- plotdata[order(plotdata$p.value),]
+    plotdata <- plotdata[1:topn,]
+  }
+  }
+
   plotdata_all <- do.call("rbind", lapply(testclusters, function(x) {
     enrich_list[[x]]$cluster <- x
     return(enrich_list[[x]])}))
