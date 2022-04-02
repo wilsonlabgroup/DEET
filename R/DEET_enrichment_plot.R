@@ -107,6 +107,8 @@ DEET_enrichment_plot <- function(enrich_list, outname, width=8, text_angle=0, ho
     plotdata <- plotdata[order(plotdata$p.value),]
     plotdata <- plotdata[1:topn,]
     #plotdata$order <- plotdata$order - min(plotdata$order)
+    plotdata$order <- order(plotdata$order)
+
   }
   }
 
