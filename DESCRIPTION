@@ -9,7 +9,7 @@ Authors@R:
     person(given = "Jedid",
            family = "Ahn",
            role = "aut",
-           email = jedid.ahn@mail.utoronto.ca), 
+           email = "jedid.ahn@mail.utoronto.ca""), 
     person(given = "Lauren",
           family = "Erdman",
           role = "aut",
