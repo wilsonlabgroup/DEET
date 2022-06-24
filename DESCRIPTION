@@ -8,10 +8,26 @@ Authors@R:
            email = "dustin.sokolowski@sickkids.ca"),
     person(given = "Jedid",
            family = "Ahn",
-           role = "aut"))
+           role = "aut",
+           email = jedid.ahn@mail.utoronto.ca), 
+    person(given = "Lauren",
+          family = "Erdman",
+          role = "aut",
+          email = "lauren.erdman@sickkids.ca"),
+    person(given = "Huayun", 
+          family = "Hou", 
+          role = "aut",
+          email = "huayunhou@gmail.com"),
+    person(given = "Anna",
+          family = "Goldenberg", 
+          role = "aut",
+          email = "nyulik@gmail.com"),
+    person(given = "Michael", 
+           family = "Wilson", 
+           role = "aut", 
+           email = "michael.wilson@sickkids.ca"))
 Maintainer: Dustin Sokolowski <dustin.sokolowski@sickkids.ca>
-Description: A bio informatics R package for comparing a list of human genes to 
-    published RNA-Seq studies containing similar DE genes.
+Description: A bio informatics R package for comparing a list of human genes to published RNA-Seq studies containing similar DE genes. Reference: Sokolowski,D.J., Ahn J., Erdman,L., Hou,H., Wang L., Goldenberg,A., and Wilson,M.D. (2022) Differential Expression Enrichment Tool (DEET): An interactive atlas of human differential gene expression. (In Preparation).
 Depends: R (>= 3.5.0)
 Imports: 
   ActivePathways,
