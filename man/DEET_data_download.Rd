@@ -4,7 +4,7 @@
 \alias{DEET_data_download}
 \title{DEET_data_download}
 \usage{
-DEET_data_download(x = "ALL")
+DEET_data_download(x = "enrich")
 }
 \arguments{
 \item{x}{categorical variable containing options "ALL", "enrich",
@@ -17,8 +17,8 @@ can also be downloaded.
 
 \itemize{
   \item feature_matrix - A gene by comparison matrix populated
-  with the log2FC of gene expression for the genes that are
-  considered DE within the study (padj < 0.05).
+   with the log2FC of gene expression for all genes, regardless
+   of DE status.
   \item metadata - a comparison - by - explanatory piece of data dataframe
    providing important details to contextualize each study.
    For every pairwise comparison, the study name,

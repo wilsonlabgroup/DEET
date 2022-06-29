@@ -14,8 +14,8 @@
 #'
 #' \itemize{
 #'   \item feature_matrix - A gene by comparison matrix populated
-#'   with the log2FC of gene expression for the genes that are
-#'   considered DE within the study (padj < 0.05).
+#'    with the log2FC of gene expression for all genes, regardless
+#'    of DE status.
 #'   \item metadata - a comparison - by - explanatory piece of data dataframe
 #'    providing important details to contextualize each study.
 #'    For every pairwise comparison, the study name,
@@ -62,7 +62,7 @@
 #' @export
 #' @importFrom downloader download
 #'
-DEET_data_download <- function(x = "ALL") {
+DEET_data_download <- function(x = "enrich") {
   #dummy_downloads
   DEET_metadata <- DEET_combined <- DEET_log2FC_matrix <- ""
   inputCheck <- c(x %in% c("ALL", "enrich", "metadata", "feature_matrix"))
