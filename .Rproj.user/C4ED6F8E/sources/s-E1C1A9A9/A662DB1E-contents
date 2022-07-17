@@ -1,0 +1,9 @@
+example <- read.delim("../DEET/example_DEET_enrich_input.txt",header=T)
+rownames(example) <- example[,1]
+head(example)
+example_DEET_enrich_input <- example
+save(example_DEET_enrich_input, file = "data/example_DEET_enrich_input.rda")
+
+data("example_DEET_enrich_input")
+data("DEET_example_data")
+DEET_out <- DEET_enrich(example_DEET_enrich_input, DEET_dataset = DEET_example_data)
