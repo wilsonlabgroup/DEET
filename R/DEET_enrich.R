@@ -319,7 +319,7 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
 
   # 5) Find enriched TFs of input gene list on DEET’s TFs of studies.
   comp_tf <- as.matrix(AP_INPUT_TF$adjusted.p.val)
-  rownames(comp_tf) <- AP_INPUT_TF$term.name
+  rownames(comp_tf) <- AP_INPUT_TF$term.id
 
   if(min(comp_tf) >= 0.05) {
     AP_DEET_TF_sig <- "Internal motif enrichment of input gene list did not
