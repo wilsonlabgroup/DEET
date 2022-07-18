@@ -295,6 +295,10 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
   comp_bp <- as.matrix(AP_INPUT_BP$adjusted.p.val)
   rownames(comp_bp) <- AP_INPUT_BP$term.name
 
+  if(nrow(comp_bp) > 0) {
+  comp_bp <- comp_bp[!duplicated(rownames(comp_bp)),]
+  }
+  
   if(min(comp_bp) >= 0.05) {
     AP_DEET_BP_sig <- "Internal pathway enrichment of input gene list did not
     discover biological pathways matching cutoff."
