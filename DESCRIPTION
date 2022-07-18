@@ -1,6 +1,6 @@
 Package: DEET
 Title: Differential Expression Enrichment Tool (DEET). An interactive atlas of human differential gene expression
-Version: 1.0.4
+Version: 1.0.5
 Authors@R: 
   c(person(given = "Dustin",
            family = "Sokolowski",
