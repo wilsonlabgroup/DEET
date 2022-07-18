@@ -290,14 +290,12 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
   # ----------------------------------------------------------------------------
 
 
-
+  if(nrow(AP_INPUT_BP) > 0) {
+    AP_INPUT_BP <- AP_INPUT_BP[!duplicated(AP_INPUT_BP$term.name),]
+  }
   # 4) Find enriched BPs of input gene list on DEET’s BPs of studies.
   comp_bp <- as.matrix(AP_INPUT_BP$adjusted.p.val)
   rownames(comp_bp) <- AP_INPUT_BP$term.name
-
-  if(nrow(comp_bp) > 0) {
-  comp_bp <- comp_bp[!duplicated(rownames(comp_bp)),]
-  }
   
   if(min(comp_bp) >= 0.05) {
     AP_DEET_BP_sig <- "Internal pathway enrichment of input gene list did not
