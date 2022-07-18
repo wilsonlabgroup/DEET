@@ -241,8 +241,17 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
                                                 correction.method = "fdr",
                                                 significant = 1,
                                                 cutoff = 0.05)
+  
   AP_INPUT_BP_output <- AP_INPUT_BP[AP_INPUT_BP$adjusted.p.val < 0.05, ]
 
+  # bp1[bp1$adjusted.p.val == 0] <- min(bp1$adjusted.p.val[bp1$adjusted.p.val != 0])
+  
+  if(nrow(AP_INPUT_BP_output) > 0) {
+  
+    AP_INPUT_BP_output$adjusted.p.val[AP_INPUT_BP_output$adjusted.p.val == 0] <- min(AP_INPUT_BP_output$adjusted.p.val[AP_INPUT_BP_output$adjusted.p.val != 0])
+    
+  }
+  
   # ----------------------------------------------------------------------------
 
   # 2) Find enriched TFs of input gene list.
@@ -260,6 +269,10 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
                                                 cutoff = 0.05)
   AP_INPUT_TF_output <- AP_INPUT_TF[AP_INPUT_TF$adjusted.p.val < 0.05, ]
 
+  if(nrow(AP_INPUT_TF_output) > 0) {
+    AP_INPUT_TF_output$adjusted.p.val[AP_INPUT_TF_output$adjusted.p.val == 0] <- min(AP_INPUT_TF_output$adjusted.p.val[AP_INPUT_TF_output$adjusted.p.val != 0])
+  }
+  
   # ----------------------------------------------------------------------------
 
   # 3) Gene set enrichment of input gene list with DEET studies.
@@ -279,6 +292,12 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
                                                cutoff = 0.05)
   AP_DEET_DE_sig <- AP_DEET_DE[AP_DEET_DE$adjusted.p.val < 0.05, ]
 
+  if(nrow(AP_DEET_DE_sig) > 0) {
+    
+  AP_DEET_DE_sig$adjusted.p.val[AP_DEET_DE_sig$adjusted.p.val == 0] <- min(AP_DEET_DE_sig$adjusted.p.val[AP_DEET_DE_sig$adjusted.p.val != 0])
+  
+  }
+  
   # If nothing was enirched at this point
   if(sum(nrow(AP_DEET_DE_sig), nrow(AP_INPUT_BP_output), nrow(AP_INPUT_TF_output)) == 0) {
     warning("Basic pathway enrichment and DEET all yeiled0 signficant pathwys, TF motifs, and studies. Check input if you think there should be some enrichment.")
@@ -315,6 +334,11 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
                                                  significant = 1,
                                                  cutoff = 0.05)
     AP_DEET_BP_sig <- AP_DEET_BP[ AP_DEET_BP$adjusted.p.val < 0.05, ]
+    
+    if(nrow(AP_DEET_BP_sig) > 0) {
+      
+      AP_DEET_BP_sig$adjusted.p.val[AP_DEET_BP_sig$adjusted.p.val == 0] <- min(AP_DEET_BP_sig$adjusted.p.val[AP_DEET_BP_sig$adjusted.p.val != 0])
+    }
   }
 
   # ----------------------------------------------------------------------------
@@ -344,6 +368,12 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
                                                  significant = 1,
                                                  cutoff = 0.05)
     AP_DEET_TF_sig <- AP_DEET_TF[ AP_DEET_TF$adjusted.p.val < 0.05, ]
+    
+    if(nrow(AP_DEET_BP_sig) > 0) {
+      
+      AP_DEET_TF_sig$adjusted.p.val[AP_DEET_TF_sig$adjusted.p.val == 0] <- min(AP_DEET_TF_sig$adjusted.p.val[AP_DEET_TF_sig$adjusted.p.val != 0])
+    }
+    
   }
 
   # ----------------------------------------------------------------------------
