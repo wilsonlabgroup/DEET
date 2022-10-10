@@ -369,7 +369,7 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
                                                  cutoff = 0.05)
     AP_DEET_TF_sig <- AP_DEET_TF[ AP_DEET_TF$adjusted.p.val < 0.05, ]
     
-    if(nrow(AP_DEET_BP_sig) > 0) {
+    if(nrow(AP_DEET_TF_sig) > 0) {
       
       AP_DEET_TF_sig$adjusted.p.val[AP_DEET_TF_sig$adjusted.p.val == 0] <- min(AP_DEET_TF_sig$adjusted.p.val[AP_DEET_TF_sig$adjusted.p.val != 0])
     }
