@@ -22,6 +22,12 @@ If you prefer a point-and-click equivalent with >90% of the capability and flexi
 
 https://wilsonlab-sickkids-uoft.shinyapps.io/DEET-shiny/
 
+### Manuscript
+
+The manuscript is currently in pre-print: 
+
+https://www.biorxiv.org/content/10.1101/2022.08.29.505468v1.article-metrics
+
 #### Running DEET_enrich
 
 Users inputs a list of genes to identify which DE comparisons within DEET are significantly enriched based on overlapping DE genes, pathways, and TF information.
