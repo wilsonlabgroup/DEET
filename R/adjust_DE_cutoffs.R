@@ -27,7 +27,6 @@
 #' DEET_cutoff <- adjust_DE_cutoffs(DEET_example_data, abslog2FoldChange = 1, padj = 0.01)
 #'
 #'
-#' @references
 #'
 #' @export
 #'
