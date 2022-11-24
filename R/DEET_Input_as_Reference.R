@@ -76,7 +76,7 @@ DEET_Input_as_Reference <- function(genes, DEET_dataset, background = NULL) {
   rownames(DEET_metadata) <- DEET_metadata$DEET.ID
   
   DEET_metadata <- DEET_metadata[names(DEET_DE),]
-  
+  input_name="input"
   Ref <- list()
   Ref[[input_name]] <- list(id=input_name,
                             name=input_name,
