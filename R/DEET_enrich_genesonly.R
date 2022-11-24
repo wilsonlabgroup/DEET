@@ -1,7 +1,9 @@
-#' @title DEET_enrich
+#' @title DEET_enrich_genesonly
 #'
-#' @description Core function of DEET where an input weighted human gene list
-#' will be queried to DEETs library of studies.
+#' @description Altered version of the  function of DEET where 
+#' an input weighted human gene list will be queried to DEETs 
+#' library of studies. This version does not include pathway 
+#' enrichments.
 #'
 #' @param DEG_list Data frame or matrix of gene symbols with corresponding padj
 #' and log2FC values (3 columns in total). Can also be a character vector of
@@ -12,22 +14,18 @@
 #' Appropriate inputs here are "DEET_example_data" stored within DEET, the "DEET_combined.rda" file
 #' from the DEET stable repositoy found at X, and the DEET database developmental repository found at Y.
 #' The DEET_dataset is a named list where details of it's structure can be found ?DEET_example_data.
+#' Unlike in DEET_enrich, this dataset does not require the pathway-relevant elements
+#' of the DEET_dataset list, namely "gmt_BP", or "gmt_TF" "DEET_gmt_BP",  "DEET_gmt_TF".
 #' @param ordered Boolean value specifying whether DEG_list is a character
 #' vector of gene symbols that is ordered. Default value is FALSE.
 #' @param background Character vector of human gene symbols showing all
 #' possible genes. Default value is NULL.
 #'
 #'
-#' @return Named list where each element contains 6 objects. Each object will
+#' @return Named list where each element contains 2 objects. Each object will
 #' contain the results (enrichment or correlation) and corresponding metadata.
 #' \itemize{
-#'   \item AP_INPUT_BP_output - Enriched BPs of input gene list.
-#'   \item AP_INPUT_TF_output - Enriched TFs of input gene list.
 #'   \item AP_DEET_DE_output  - Enrichment of input gene list on DEETs studies.
-#'   \item AP_DEET_BP_output  - Enrichment of BPs of input gene list on DEETs
-#'   BPs of studies.
-#'   \item AP_DEET_TF_output  - Enrichment of TFs of input gene list on DEETs
-#'   TFs of studies.
 #'   \item DE_correlations    - Correlation values of input gene list to DEETs
 #'   studies (both Pearson and Spearman).
 #' }
@@ -38,7 +36,7 @@
 #'
 #' data("example_DEET_enrich_input")
 #' data("DEET_example_data")
-#' DEET_out <- DEET_enrich(example_DEET_enrich_input, DEET_dataset = DEET_example_data)
+#' DEET_out <- DEET_enrich_genesonly(example_DEET_enrich_input, DEET_dataset = DEET_example_data)
 #'
 #'
 #' @references
@@ -52,7 +50,7 @@
 #' @importFrom pbapply pblapply
 #' @importFrom stats cor.test p.adjust var
 #'
-DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NULL){
+DEET_enrich_genesonly <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NULL){
 
 
   # Internal data loaded through sysdata.rda.
@@ -94,10 +92,8 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
     # Populate input fold-change.
     DEG_processed1 <- DEG_processed[DEG_processed$gene_symbol %in% genes_cor, ]
     DEG_processed1 <- DEG_processed1[genes_cor,]
-    mat$input <- DEG_processed1$coef
-    
-    #mat$input <- DEG_processed[DEG_processed$gene_symbol %in% genes_cor, ]$coef
-
+     mat$input <- DEG_processed1$coef
+     
     # Populate DEET fold-change.
     mat$DEET <- comp[genes_cor, ]$log2FoldChange
 
@@ -204,20 +200,18 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
       stop("Background must be a character vector.")
     }
   }
-  nameRight <- all(names(DEET_dataset) %in%     c("DEET_DE", "DEET_gmt_BP", "DEET_gmt_TF", "DEET_gmt_DE", "DEET_metadata", "gmt_BP", "gmt_TF"))
+  nameRight <- all(  c("DEET_DE", "DEET_gmt_DE", "DEET_metadata") %in% names(DEET_dataset) )
 
   if(!nameRight) {
-    stop("Names of the list in DEET dataset aren't correct. Make sure appopriate file is downloaded and inputted. Check 'DEET_example_data' for reference.")
+    stop("DE Dataset is missing element 'DEET_DE', 'DEET_gmt_DE', and/or 'DEET_metadata')")
   }
 
   DEET_DE <- DEET_dataset$DEET_DE
-  DEET_gmt_BP <- DEET_dataset$DEET_gmt_BP
-  DEET_gmt_TF <- DEET_dataset$DEET_gmt_TF
+
   DEET_gmt_DE <- DEET_dataset$DEET_gmt_DE
   DEET_metadata <- DEET_dataset$DEET_metadata
   rownames(DEET_metadata) <- DEET_metadata$DEET.ID
-  gmt_BP <- DEET_dataset$gmt_BP
-  gmt_TF <- DEET_dataset$gmt_TF
+
 
   # ============================================================================
 
@@ -233,50 +227,7 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
 
   # 1) Find enriched BPs of input gene list.
   # If background variable is NULL, make background using AP.
-  message("Running pathway enrichment of input gene list to find enriched BPs.")
-  if(is.null(background)) {
-    background <- ActivePathways::makeBackground(gmt_BP)
-  }
-  AP_INPUT_BP <- ActivePathways::ActivePathways(scores = comp,
-                                                gmt = gmt_BP,
-                                                background = background,
-                                                geneset.filter = c(15, 2000),
-                                                merge.method = "Brown",
-                                                correction.method = "fdr",
-                                                significant = 1,
-                                                cutoff = 0.05)
-  
-  AP_INPUT_BP_output <- AP_INPUT_BP[AP_INPUT_BP$adjusted.p.val < 0.05, ]
 
-  # bp1[bp1$adjusted.p.val == 0] <- min(bp1$adjusted.p.val[bp1$adjusted.p.val != 0])
-  
-  if(nrow(AP_INPUT_BP_output) > 0) {
-  
-    AP_INPUT_BP_output$adjusted.p.val[AP_INPUT_BP_output$adjusted.p.val == 0] <- min(AP_INPUT_BP_output$adjusted.p.val[AP_INPUT_BP_output$adjusted.p.val != 0])
-    
-  }
-  
-  # ----------------------------------------------------------------------------
-
-  # 2) Find enriched TFs of input gene list.
-  message("Running motif enrichment of input gene list to find enriched TFs.")
-  if (is.null(background)){
-    background <- ActivePathways::makeBackground(gmt_TF)
-  }
-  AP_INPUT_TF <- ActivePathways::ActivePathways(scores = comp,
-                                                gmt = gmt_TF,
-                                                background = background,
-                                                geneset.filter = c(15, 5000),
-                                                merge.method = "Brown",
-                                                correction.method = "fdr",
-                                                significant = 1,
-                                                cutoff = 0.05)
-  AP_INPUT_TF_output <- AP_INPUT_TF[AP_INPUT_TF$adjusted.p.val < 0.05, ]
-
-  if(nrow(AP_INPUT_TF_output) > 0) {
-    AP_INPUT_TF_output$adjusted.p.val[AP_INPUT_TF_output$adjusted.p.val == 0] <- min(AP_INPUT_TF_output$adjusted.p.val[AP_INPUT_TF_output$adjusted.p.val != 0])
-  }
-  
   # ----------------------------------------------------------------------------
 
   # 3) Gene set enrichment of input gene list with DEET studies.
@@ -303,86 +254,20 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
   }
   
   # If nothing was enirched at this point
-  if(sum(nrow(AP_DEET_DE_sig), nrow(AP_INPUT_BP_output), nrow(AP_INPUT_TF_output)) == 0) {
-    warning("Basic pathway enrichment and DEET all yieled 0 signficant pathways, TF motifs, and studies. Check input if you think there should be some enrichment.")
+  if((nrow(AP_DEET_DE_sig) == 0)) {
+    warning("Basic pathway enrichment and DEET all yieled 0 signficant studies. Check input if you think there should be some enrichment.")
 
-    return("Basic pathway enrichment and DEET all yieled 0 signficant pathways, TF motifs, and studies. Check input if you think there should be some enrichment.")
+    return("DEET yielded 0 enriched studies. Check input if you think there should be some enrichment.")
   }
 
   # If nothing is enriched -- return that statement
   # ----------------------------------------------------------------------------
 
 
-  if(nrow(AP_INPUT_BP) > 0) {
-    AP_INPUT_BP <- AP_INPUT_BP[!duplicated(AP_INPUT_BP$term.name),]
-  }
-  # 4) Find enriched BPs of input gene list on DEET’s BPs of studies.
-  comp_bp <- as.matrix(AP_INPUT_BP$adjusted.p.val)
-  rownames(comp_bp) <- AP_INPUT_BP$term.name
   
-  if(min(comp_bp) >= 0.05) {
-    AP_DEET_BP_sig <- "Internal pathway enrichment of input gene list did not
-    discover biological pathways matching cutoff."
-    warning(AP_DEET_BP_sig)
-  } else {
-    message(
-      paste("Internal pathway enrichment of input gene list discovered",
-            "biological pathways matching cutoff.")
-      )
-
-    AP_DEET_BP <- ActivePathways::ActivePathways(scores = comp_bp,
-                                                 gmt = DEET_gmt_BP,
-                                                 geneset.filter = c(15, 10000),
-                                                 merge.method = "Brown",
-                                                 correction.method = "fdr",
-                                                 significant = 1,
-                                                 cutoff = 0.05)
-    AP_DEET_BP_sig <- AP_DEET_BP[ AP_DEET_BP$adjusted.p.val < 0.05, ]
-    
-    if(nrow(AP_DEET_BP_sig) > 0) {
-      
-      AP_DEET_BP_sig$adjusted.p.val[AP_DEET_BP_sig$adjusted.p.val == 0] <- min(AP_DEET_BP_sig$adjusted.p.val[AP_DEET_BP_sig$adjusted.p.val != 0])
-    }
-  }
-
   # ----------------------------------------------------------------------------
 
-  # 5) Find enriched TFs of input gene list on DEET’s TFs of studies.
-  if(nrow(AP_INPUT_TF) > 0) {
-    AP_INPUT_TF <- AP_INPUT_TF[!duplicated(AP_INPUT_TF$term.name),]
-  }
-  comp_tf <- as.matrix(AP_INPUT_TF$adjusted.p.val)
-  rownames(comp_tf) <- AP_INPUT_TF$term.name
-
-  if(min(comp_tf) >= 0.05) {
-    AP_DEET_TF_sig <- "Internal motif enrichment of input gene list did not
-    discover transcription factors matching cutoff."
-    warning(AP_DEET_TF_sig)
-  } else {
-    message(
-      paste("Internal motif enrichment of input gene list discovered",
-            "transcription factors matching cutoff.")
-      )
-
-    AP_DEET_TF <- ActivePathways::ActivePathways(scores = comp_tf,
-                                                 gmt = DEET_gmt_TF,
-                                                 geneset.filter = c(15, 10000),
-                                                 merge.method = "Brown",
-                                                 correction.method = "fdr",
-                                                 significant = 1,
-                                                 cutoff = 0.05)
-    AP_DEET_TF_sig <- AP_DEET_TF[ AP_DEET_TF$adjusted.p.val < 0.05, ]
-    
-    if(nrow(AP_DEET_TF_sig) > 0) {
-      
-      AP_DEET_TF_sig$adjusted.p.val[AP_DEET_TF_sig$adjusted.p.val == 0] <- min(AP_DEET_TF_sig$adjusted.p.val[AP_DEET_TF_sig$adjusted.p.val != 0])
-    }
-    
-  }
-
-  # ----------------------------------------------------------------------------
-
-  # 6) Perform a correlation test of input gene list to DEET’s studies
+  # 6) Perform a correlation test of input gene list to DEET's studies
   # (both Pearson and Spearman).
   if (var(DEG_processed$coef) == 0){
     cor_results_sig <- "No variance in coefs. Cannot proceed with correlation."
@@ -462,45 +347,6 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
     warning(AP_DEET_DE_output)
   }
 
-  # 4) AP_DEET_BP_output
-  if (( "data.table" %in% class(AP_DEET_BP_sig))[1] ){
-
-    if((nrow(AP_DEET_BP_sig) > 0)[1]) {
-    meta_match <- DEET_metadata[AP_DEET_BP_sig$term.id, ]
-
-    AP_DEET_BP_output <- list(results = AP_DEET_BP_sig,
-                              metadata = meta_match)
-    } else {
-      AP_DEET_BP_output <- paste("Your gene list converted to BP enrichment did",
-                                 "not significantly enrich any studies.")
-      warning(AP_DEET_BP_output)
-    }
-
-  } else{
-    AP_DEET_BP_output <- paste("Your gene list converted to BP enrichment did",
-                               "not significantly enrich any studies.")
-    warning(AP_DEET_BP_output)
-  }
-
-  # 5) AP_DEET_TF_output
-
-  if (( "data.table" %in% class(AP_DEET_TF_sig) )[1]){
-
-    if((nrow(AP_DEET_TF_sig) > 0)[1] ) {
-    meta_match <- DEET_metadata[AP_DEET_TF_sig$term.id, ]
-
-    AP_DEET_TF_output <- list(results = AP_DEET_TF_sig,
-                              metadata = meta_match)
-    } else {
-      AP_DEET_TF_output <- paste("Your gene list converted to TF enrichment did",
-                                 "not significantly enrich any studies.")
-      warning(AP_DEET_TF_output)
-    }
-  } else{
-    AP_DEET_TF_output <- paste("Your gene list converted to TF enrichment did",
-                               "not significantly enrich any studies.")
-    warning(AP_DEET_TF_output)
-  }
 
   # 6) DE_correlations
   if(is.data.frame(cor_results_sig) && nrow(cor_results_sig) > 0) {
@@ -535,11 +381,9 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
   message(paste("Query end date and time:", Sys.time()))
 
   output <- list(
-    AP_INPUT_BP_output = AP_INPUT_BP_output,
-    AP_INPUT_TF_output = AP_INPUT_TF_output,
+
     AP_DEET_DE_output = AP_DEET_DE_output,
-    AP_DEET_BP_output = AP_DEET_BP_output,
-    AP_DEET_TF_output = AP_DEET_TF_output,
+
     DE_correlations = DE_correlations
     )
 
