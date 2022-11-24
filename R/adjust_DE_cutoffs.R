@@ -29,6 +29,7 @@
 #'
 #'
 #' @export
+#' @importFrom utils data
 #'
 
 adjust_DE_cutoffs <- function(DEET_combined, redo_pathways_instructions = FALSE, baseMean = 1, abslog2FoldChange = 0, padj = 0.05) {

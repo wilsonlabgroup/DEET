@@ -3,7 +3,7 @@
 
 ### Dustin Sokolowski: dustin-dot-sokolowski-at-sickkids-dot-ca
 
-### Date: 02/21/2022
+### Date: 11/24/2022
 
 ![alt text](https://github.com/wilsonlabgroup/DEET/blob/master/vignettes/DEET_V2.png?raw=true)
 
@@ -105,7 +105,7 @@ Once download, save these data and DEET can be used offline.
 
 ## Installation
 
- scMappR relies on the following dependencies which should be downlaoded/updated with scMappR automatically. Please ensure that these packages are not open when installing scMappR. 
+ DEET relies on the following dependencies which should be downlaoded/updated with DEET automatically. Please ensure that these packages are not open when installing DEET. 
 
   * ggplot2 - CRAN
   * ActivePathways - CRAN
@@ -135,7 +135,7 @@ devtools::install_github("wilsonlabgroup/DEET")
 
 ```{r install_cran, eval=FALSE}
 
-# IN DEVELOPMENT
+install.packages("DEET")
 
 ```
 
