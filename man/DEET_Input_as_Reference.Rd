@@ -40,7 +40,7 @@ analysis.
 data("example_DEET_enrich_input")
 genes <- rownames(example_DEET_enrich_input)
 data("DEET_example_data")
-DEET_out_ref <- DEET_Input_as_Reference(example_DEET_enrich_input, DEET_dataset = DEET_example_data)
+DEET_out_ref <- DEET_Input_as_Reference(genes, DEET_dataset = DEET_example_data)
 
 
 }

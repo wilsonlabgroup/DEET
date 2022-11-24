@@ -1,6 +1,6 @@
 Package: DEET
 Title: Differential Expression Enrichment Tool 
-Version: 1.0.6
+Version: 1.0.7
 Authors@R: 
   c(person(given = "Dustin",
            family = "Sokolowski",
@@ -48,7 +48,7 @@ URL:
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.2
-Packaged: 2022-02-24
+Packaged: 2022-11-24
 Suggests: 
   testthat,
   knitr,
