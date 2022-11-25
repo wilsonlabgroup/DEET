@@ -67,16 +67,16 @@ if(detection_cutoff < 0.5) {
 
 message("Extracting genes in response matrix.")
   
-is0 <- apply(response,1,function(x) {
+is0 <- apply(mat,1,function(x) {
     
     
     return(length(x[x!=0]))
     
   })
 
-response <- response[(is0/ncol(response) >= detection_cutoff),]
+mat <- mat[(is0/ncol(mat) >= detection_cutoff),]
 
-if(nrow(response) < 3) {
+if(nrow(mat) < 3) {
   stop("Fewer than 3 features remain, please check input or reduce 'detection_cutoff' stringency.")
 }
 
