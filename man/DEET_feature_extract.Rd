@@ -4,7 +4,7 @@
 \alias{DEET_feature_extract}
 \title{DEET_feature_extract}
 \usage{
-DEET_feature_extract(mat, response, datatype)
+DEET_feature_extract(mat, response, datatype, detection_cutoff = 0.7)
 }
 \arguments{
 \item{mat}{A gene-by-study matrix populated by the coefficients of that study.
@@ -16,6 +16,9 @@ associated the DEGs within the studies.}
 
 \item{datatype}{indication of whether the response variable is binomial,
 categorical, or continuous.}
+
+\item{detection_cutoff}{Proportion of studies where the gene is detected (not
+as DE but detected at all, designated with a FC != 0). Default value 0.7.}
 }
 \value{
 Named list given the elastic net coefficients and the eleastic net

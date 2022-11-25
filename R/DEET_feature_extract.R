@@ -10,6 +10,8 @@
 #' associated the DEGs within the studies.
 #' @param datatype indication of whether the response variable is binomial,
 #' categorical, or continuous.
+#' @param detection_cutoff Proportion of studies where the gene is detected (not
+#' as DE but detected at all, designated with a FC != 0). Default value 0.7.
 #'
 #'
 #' @return Named list given the elastic net coefficients and the eleastic net
@@ -45,13 +47,40 @@
 #' @importFrom stats cor.test p.adjust aov complete.cases wilcox.test
 #' @importFrom utils data
 #'
-DEET_feature_extract <- function(mat, response, datatype) {
+DEET_feature_extract <- function(mat, response, datatype, detection_cutoff = 0.7) {
 
 # Make sure that the type of variable where we'll extract features from is a type that we can work with
 if(!(datatype %in% c("continuous","categorical","binomial"))) stop("Response variable must be 'continuous', 'categorical', or 'binomial'")
 
+if(!is.numeric(detection_cutoff)) {
+  stop("Detection cutoff must be a numeric value between 0 and 1 (not inclusive).")
+}  
+if(!(detection_cutoff > 0 & detection_cutoff < 1) ) {
+    stop("Detection cutoff must be a numeric value between 0 and 1 (not inclusive).")
+}  
+  
+if(detection_cutoff < 0.5) {
+  warning("Detection cutoff set to < 0.5, co-efficients may be driven by
+          genes detected in the same study instead of genes DE within the
+          same compairson.")
+}
 
+message("Extracting genes in response matrix.")
+  
+is0 <- apply(response,1,function(x) {
+    
+    
+    return(length(x[x!=0]))
+    
+  })
 
+response <- response[(is0/ncol(response) >= detection_cutoff),]
+
+if(nrow(response) < 3) {
+  stop("Fewer than 3 features remain, please check input or reduce 'detection_cutoff' stringency.")
+}
+
+message("Extracting features")
 if(datatype == "continuous") {
   # Run an elastic net of the continuous variable
   if (is.factor(response)) response <- (as.numeric(levels(response))[response])
