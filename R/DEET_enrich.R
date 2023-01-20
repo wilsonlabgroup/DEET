@@ -16,6 +16,10 @@
 #' vector of gene symbols that is ordered. Default value is FALSE.
 #' @param background Character vector of human gene symbols showing all
 #' possible genes. Default value is NULL.
+#' @param abs_cor Boolean value that forces log2FC's in DEET to be
+#' their absolute value. Use when the directionality of the coefficient 
+#' is unknown (or includes both up- down- directions). Default value
+#' is FALSE.
 #'
 #'
 #' @return Named list where each element contains 6 objects. Each object will
@@ -52,7 +56,7 @@
 #' @importFrom pbapply pblapply
 #' @importFrom stats cor.test p.adjust var
 #'
-DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NULL){
+DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NULL, abs_cor = FALSE){
 
 
   # Internal data loaded through sysdata.rda.
@@ -120,7 +124,13 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
     # Populate input fold-change
     mat[DEG_processed$gene_symbol, "input"] <- DEG_processed$coef
     # Populate DEET fold-change
-    mat[rownames(comp), "DEET"] <- comp$log2FoldChange
+    if(abs_cor) {
+      mat[rownames(comp), "DEET"] <- abs(comp$log2FoldChange)
+      
+    } else {
+      mat[rownames(comp), "DEET"] <- comp$log2FoldChange
+      
+    }
 
     col <- rep("grey", nrow(mat))
     col[(mat[,1] > 0 & mat[,2] > 0) | (mat[,1] < 0 & mat[,2] < 0) ] <- "purple"
