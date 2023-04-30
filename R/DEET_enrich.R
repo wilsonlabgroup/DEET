@@ -439,11 +439,17 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
       cor_results_sig <- cor_results[cor_results$FDR_Pear < 0.1 |
                                        cor_results$FDR_Spear < 0.1, ]
 
-      cor_mats_sig <- cor_mats[cor_results$FDR_Pear < 0.1 |
-                                 cor_results$FDR_Spear < 0.1]
-
-      rownames(cor_results_sig) <- cor_results_sig$DEET.ID
-      names(cor_mats_sig) <- cor_results_sig$DEET.ID
+      cor_results_sig <- cor_results_sig[complete.cases(cor_results_sig),]
+      if(nrow(cor_results_sig) > 0) {
+        cor_mats_sig <- cor_mats[cor_results$FDR_Pear < 0.1 |
+                                   cor_results$FDR_Spear < 0.1]
+        
+        rownames(cor_results_sig) <- cor_results_sig$DEET.ID
+        names(cor_mats_sig) <- cor_results_sig$DEET.ID
+      } else {
+        cor_results_sig <- "No studies had any correlated DEGs."
+        warning(cor_results_sig) 
+      }
     } else {
       cor_results_sig <- "No enriched comparisons had more than two DEGs, cannot compute correlations."
       warning(cor_results_sig) 
