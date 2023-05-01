@@ -3,7 +3,7 @@
 
 ### Dustin Sokolowski: dustin-dot-sokolowski-at-sickkids-dot-ca
 
-### Date: 11/24/2022
+### Date: 05/01/2023
 
 ![alt text](https://github.com/wilsonlabgroup/DEET/blob/master/vignettes/DEET_V2.png?raw=true)
 
@@ -24,9 +24,9 @@ https://wilsonlab-sickkids-uoft.shinyapps.io/DEET-shiny/
 
 ### Manuscript
 
-The manuscript is currently in pre-print: 
+The manuscript is currently published in Nucleic Acids Research - Genomics and Bioinformatics: 
 
-https://www.biorxiv.org/content/10.1101/2022.08.29.505468v1.article-metrics
+Sokolowski, Dustin J., Jedid Ahn, Lauren Erdman, Huayun Hou, Kai Ellis, Liangxi Wang, Anna Goldenberg, and Michael D. Wilson. "Differential Expression Enrichment Tool (DEET). an interactive atlas of human differential gene expression." NAR Genomics and Bioinformatics 5, no. 1 (2023): lqad003.
 
 #### Running DEET_enrich
 
