@@ -148,6 +148,11 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
     l <- list(summary_cor = summary_cor, matrix = mat)
     return (l)
   }
+  
+  adjust_ap2_names <- function(x) {
+   colnames(x) <- gsub("\\.","_",colnames(x))
+   return(x)
+  }
 
   # Official code starts here.
   if(!(is.data.frame(DEG_list) | is.matrix(DEG_list) | is.character(DEG_list))){
@@ -235,6 +240,9 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
 
   DEG_processed <- DEG_processed[!duplicated(DEG_processed[,1]),]
   rownames(DEG_processed) <- DEG_processed[,1]
+  
+  
+  
   comp <- as.matrix(DEG_processed[ , "padj"])
 
 
@@ -256,13 +264,21 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
                                                 significant = 1,
                                                 cutoff = 0.05)
   
-  AP_INPUT_BP_output <- AP_INPUT_BP[AP_INPUT_BP$adjusted.p.val < 0.05, ]
 
-  # bp1[bp1$adjusted.p.val == 0] <- min(bp1$adjusted.p.val[bp1$adjusted.p.val != 0])
+  if("term.id" %in% colnames(AP_INPUT_BP)) {
+    
+    AP_INPUT_BP <- adjust_ap2_names(AP_INPUT_BP)
+  }
+  
+  AP_INPUT_BP_output <- AP_INPUT_BP[AP_INPUT_BP$adjusted_p_val < 0.05, ]
+
+
+  
+  # bp1[bp1$adjusted_p_val == 0] <- min(bp1$adjusted_p_val[bp1$adjusted_p_val != 0])
   
   if(nrow(AP_INPUT_BP_output) > 0) {
   
-    AP_INPUT_BP_output$adjusted.p.val[AP_INPUT_BP_output$adjusted.p.val == 0] <- min(AP_INPUT_BP_output$adjusted.p.val[AP_INPUT_BP_output$adjusted.p.val != 0])
+    AP_INPUT_BP_output$adjusted_p_val[AP_INPUT_BP_output$adjusted_p_val == 0] <- min(AP_INPUT_BP_output$adjusted_p_val[AP_INPUT_BP_output$adjusted_p_val != 0])
     
   }
   
@@ -281,10 +297,18 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
                                                 correction.method = "fdr",
                                                 significant = 1,
                                                 cutoff = 0.05)
-  AP_INPUT_TF_output <- AP_INPUT_TF[AP_INPUT_TF$adjusted.p.val < 0.05, ]
+ 
+  if("term.id" %in% colnames(AP_INPUT_TF)) {
+    
+    AP_INPUT_TF <- adjust_ap2_names(AP_INPUT_TF)
+  }
+  
+   AP_INPUT_TF_output <- AP_INPUT_TF[AP_INPUT_TF$adjusted_p_val < 0.05, ]
 
+
+  
   if(nrow(AP_INPUT_TF_output) > 0) {
-    AP_INPUT_TF_output$adjusted.p.val[AP_INPUT_TF_output$adjusted.p.val == 0] <- min(AP_INPUT_TF_output$adjusted.p.val[AP_INPUT_TF_output$adjusted.p.val != 0])
+    AP_INPUT_TF_output$adjusted_p_val[AP_INPUT_TF_output$adjusted_p_val == 0] <- min(AP_INPUT_TF_output$adjusted_p_val[AP_INPUT_TF_output$adjusted_p_val != 0])
   }
   
   # ----------------------------------------------------------------------------
@@ -304,11 +328,17 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
                                                correction.method = "fdr",
                                                significant = 1,
                                                cutoff = 0.05)
-  AP_DEET_DE_sig <- AP_DEET_DE[AP_DEET_DE$adjusted.p.val < 0.05, ]
+  
+  if("term.id" %in% colnames(AP_DEET_DE)) {
+    
+    AP_DEET_DE <- adjust_ap2_names(AP_DEET_DE)
+  }
+  
+  AP_DEET_DE_sig <- AP_DEET_DE[AP_DEET_DE$adjusted_p_val < 0.05, ]
 
   if(nrow(AP_DEET_DE_sig) > 0) {
     
-  AP_DEET_DE_sig$adjusted.p.val[AP_DEET_DE_sig$adjusted.p.val == 0] <- min(AP_DEET_DE_sig$adjusted.p.val[AP_DEET_DE_sig$adjusted.p.val != 0])
+  AP_DEET_DE_sig$adjusted_p_val[AP_DEET_DE_sig$adjusted_p_val == 0] <- min(AP_DEET_DE_sig$adjusted_p_val[AP_DEET_DE_sig$adjusted_p_val != 0])
   
   }
   
@@ -324,11 +354,11 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
 
 
   if(nrow(AP_INPUT_BP) > 0) {
-    AP_INPUT_BP <- AP_INPUT_BP[!duplicated(AP_INPUT_BP$term.name),]
+    AP_INPUT_BP <- AP_INPUT_BP[!duplicated(AP_INPUT_BP$term_name),]
   }
   # 4) Find enriched BPs of input gene list on DEET’s BPs of studies.
-  comp_bp <- as.matrix(AP_INPUT_BP$adjusted.p.val)
-  rownames(comp_bp) <- AP_INPUT_BP$term.name
+  comp_bp <- as.matrix(AP_INPUT_BP$adjusted_p_val)
+  rownames(comp_bp) <- AP_INPUT_BP$term_name
   
   if(min(comp_bp) >= 0.05) {
     AP_DEET_BP_sig <- "Internal pathway enrichment of input gene list did not
@@ -347,11 +377,17 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
                                                  correction.method = "fdr",
                                                  significant = 1,
                                                  cutoff = 0.05)
-    AP_DEET_BP_sig <- AP_DEET_BP[ AP_DEET_BP$adjusted.p.val < 0.05, ]
+    
+    if("term.id" %in% colnames(AP_DEET_BP)) {
+      
+      AP_DEET_BP <- adjust_ap2_names(AP_DEET_BP)
+    }
+    
+    AP_DEET_BP_sig <- AP_DEET_BP[ AP_DEET_BP$adjusted_p_val < 0.05, ]
     
     if(nrow(AP_DEET_BP_sig) > 0) {
       
-      AP_DEET_BP_sig$adjusted.p.val[AP_DEET_BP_sig$adjusted.p.val == 0] <- min(AP_DEET_BP_sig$adjusted.p.val[AP_DEET_BP_sig$adjusted.p.val != 0])
+      AP_DEET_BP_sig$adjusted_p_val[AP_DEET_BP_sig$adjusted_p_val == 0] <- min(AP_DEET_BP_sig$adjusted_p_val[AP_DEET_BP_sig$adjusted_p_val != 0])
     }
   }
 
@@ -359,10 +395,10 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
 
   # 5) Find enriched TFs of input gene list on DEET’s TFs of studies.
   if(nrow(AP_INPUT_TF) > 0) {
-    AP_INPUT_TF <- AP_INPUT_TF[!duplicated(AP_INPUT_TF$term.name),]
+    AP_INPUT_TF <- AP_INPUT_TF[!duplicated(AP_INPUT_TF$term_name),]
   }
-  comp_tf <- as.matrix(AP_INPUT_TF$adjusted.p.val)
-  rownames(comp_tf) <- AP_INPUT_TF$term.name
+  comp_tf <- as.matrix(AP_INPUT_TF$adjusted_p_val)
+  rownames(comp_tf) <- AP_INPUT_TF$term_name
 
   if(min(comp_tf) >= 0.05) {
     AP_DEET_TF_sig <- "Internal motif enrichment of input gene list did not
@@ -381,11 +417,17 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
                                                  correction.method = "fdr",
                                                  significant = 1,
                                                  cutoff = 0.05)
-    AP_DEET_TF_sig <- AP_DEET_TF[ AP_DEET_TF$adjusted.p.val < 0.05, ]
+    if("term.id" %in% colnames(AP_DEET_TF)) {
+      
+      AP_DEET_TF <- adjust_ap2_names(AP_DEET_TF)
+    }
+    
+    
+    AP_DEET_TF_sig <- AP_DEET_TF[ AP_DEET_TF$adjusted_p_val < 0.05, ]
     
     if(nrow(AP_DEET_TF_sig) > 0) {
       
-      AP_DEET_TF_sig$adjusted.p.val[AP_DEET_TF_sig$adjusted.p.val == 0] <- min(AP_DEET_TF_sig$adjusted.p.val[AP_DEET_TF_sig$adjusted.p.val != 0])
+      AP_DEET_TF_sig$adjusted_p_val[AP_DEET_TF_sig$adjusted_p_val == 0] <- min(AP_DEET_TF_sig$adjusted_p_val[AP_DEET_TF_sig$adjusted_p_val != 0])
     }
     
   }
@@ -408,8 +450,8 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
               "overlapping DEGs.")
       )
 
-      DEET_DE_sub <- DEET_DE[AP_DEET_DE_sig_sub$term.id]
-      DEET_metadata_sub <- DEET_metadata[AP_DEET_DE_sig_sub$term.id, ]
+      DEET_DE_sub <- DEET_DE[AP_DEET_DE_sig_sub$term_id]
+      DEET_metadata_sub <- DEET_metadata[AP_DEET_DE_sig_sub$term_id, ]
 
       tst <- pbapply::pblapply(1:length(DEET_DE_sub),
                                FUN = single_gene_set_cor_test,
@@ -463,7 +505,7 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
   # 3) AP_DEET_DE_output
   if (( "data.table" %in% class(AP_DEET_DE_sig))[1]){
     if(nrow(AP_DEET_DE_sig) > 0 ) {
-    meta_match <- DEET_metadata[AP_DEET_DE_sig$term.id, ]
+    meta_match <- DEET_metadata[AP_DEET_DE_sig$term_id, ]
 
     AP_DEET_DE_output <- list(results = AP_DEET_DE_sig,
                               metadata = meta_match)
@@ -482,7 +524,7 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
   if (( "data.table" %in% class(AP_DEET_BP_sig))[1] ){
 
     if((nrow(AP_DEET_BP_sig) > 0)[1]) {
-    meta_match <- DEET_metadata[AP_DEET_BP_sig$term.id, ]
+    meta_match <- DEET_metadata[AP_DEET_BP_sig$term_id, ]
 
     AP_DEET_BP_output <- list(results = AP_DEET_BP_sig,
                               metadata = meta_match)
@@ -503,7 +545,7 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
   if (( "data.table" %in% class(AP_DEET_TF_sig) )[1]){
 
     if((nrow(AP_DEET_TF_sig) > 0)[1] ) {
-    meta_match <- DEET_metadata[AP_DEET_TF_sig$term.id, ]
+    meta_match <- DEET_metadata[AP_DEET_TF_sig$term_id, ]
 
     AP_DEET_TF_output <- list(results = AP_DEET_TF_sig,
                               metadata = meta_match)
