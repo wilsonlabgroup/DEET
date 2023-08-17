@@ -240,16 +240,16 @@ DEET_enrich_genesonly <- function(DEG_list, DEET_dataset, ordered = FALSE, backg
   AP_DEET_DE <- ActivePathways::ActivePathways(scores = comp,
                                                gmt = DEET_gmt_DE,
                                                background = background,
-                                               geneset.filter = c(15, 10000),
-                                               merge.method = "Brown",
-                                               correction.method = "fdr",
+                                               geneset_filter = c(15, 10000),
+                                               merge_method = "Brown",
+                                               correction_method = "fdr",
                                                significant = 1,
                                                cutoff = 0.05)
-  AP_DEET_DE_sig <- AP_DEET_DE[AP_DEET_DE$adjusted.p.val < 0.05, ]
+  AP_DEET_DE_sig <- AP_DEET_DE[AP_DEET_DE$adjusted_p_val < 0.05, ]
 
   if(nrow(AP_DEET_DE_sig) > 0) {
     
-  AP_DEET_DE_sig$adjusted.p.val[AP_DEET_DE_sig$adjusted.p.val == 0] <- min(AP_DEET_DE_sig$adjusted.p.val[AP_DEET_DE_sig$adjusted.p.val != 0])
+  AP_DEET_DE_sig$adjusted_p_val[AP_DEET_DE_sig$adjusted_p_val == 0] <- min(AP_DEET_DE_sig$adjusted_p_val[AP_DEET_DE_sig$adjusted_p_val != 0])
   
   }
   
@@ -283,8 +283,8 @@ DEET_enrich_genesonly <- function(DEG_list, DEET_dataset, ordered = FALSE, backg
               "overlapping DEGs.")
       )
 
-      DEET_DE_sub <- DEET_DE[AP_DEET_DE_sig_sub$term.id]
-      DEET_metadata_sub <- DEET_metadata[AP_DEET_DE_sig_sub$term.id, ]
+      DEET_DE_sub <- DEET_DE[AP_DEET_DE_sig_sub$term_id]
+      DEET_metadata_sub <- DEET_metadata[AP_DEET_DE_sig_sub$term_id, ]
 
       tst <- pbapply::pblapply(1:length(DEET_DE_sub),
                                FUN = single_gene_set_cor_test,
@@ -332,7 +332,7 @@ DEET_enrich_genesonly <- function(DEG_list, DEET_dataset, ordered = FALSE, backg
   # 3) AP_DEET_DE_output
   if (( "data.table" %in% class(AP_DEET_DE_sig))[1]){
     if(nrow(AP_DEET_DE_sig) > 0 ) {
-    meta_match <- DEET_metadata[AP_DEET_DE_sig$term.id, ]
+    meta_match <- DEET_metadata[AP_DEET_DE_sig$term_id, ]
 
     AP_DEET_DE_output <- list(results = AP_DEET_DE_sig,
                               metadata = meta_match)

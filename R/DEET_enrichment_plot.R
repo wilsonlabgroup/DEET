@@ -36,7 +36,7 @@
 #' DE_example$term.name <- DEET_out$AP_DEET_DE_output$metadata$DEET.Name
 #' DE_example$domain <- "DE"
 #' DE_example$overlap.size <- lengths(DE_example$overlap)
-#' DE_example$p.value <- DE_example$adjusted.p.val
+#' DE_example$p.value <- DE_example$adjusted_p_val
 #'
 #' DE_example_plot <- DEET_enrichment_plot(list(DE_example = DE_example), "DE_example")
 #'

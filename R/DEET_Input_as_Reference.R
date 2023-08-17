@@ -101,7 +101,7 @@ DEET_Input_as_Reference <- function(genes, DEET_dataset, background = NULL) {
     comp <- as.matrix(x$padj)
     rownames(comp) <- rownames(x)
     colnames(comp) <- "comp"
-    AP <- suppressMessages(ActivePathways::ActivePathways(comp,gmt = Ref,background = background,geneset.filter = c(1,1e5),significant = 1))
+    AP <- suppressMessages(ActivePathways::ActivePathways(comp,gmt = Ref,background = background,geneset_filter = c(1,1e5),significant = 1))
     return(AP)
   }
   message("Running ActivePathways of each gene list using input as a reference.")
@@ -120,14 +120,14 @@ DEET_Input_as_Reference <- function(genes, DEET_dataset, background = NULL) {
   ID_name <- DEET_metadata[!unname(unlist(lapply(AP_out,is.null))),]
   
   AP_out2 <- do.call("rbind",AP_out1)
-  AP_out2 <- AP_out2[AP_out2$term.id == input_name & AP_out2$term.name == input_name,]
+  AP_out2 <- AP_out2[AP_out2$term_id == input_name & AP_out2$term_name == input_name,]
   AP_out2$term.id <- ID_name$DEET.ID
   AP_out2$term.name <- ID_name$DEET.Name
-  AP_out2$p.val <- AP_out2$adjusted.p.val 
+  AP_out2$p.val <- AP_out2$adjusted_p_val 
   
-  AP_out2$adjusted.p.val <-stats::p.adjust(AP_out2$p.val, method = "fdr")
-  AP_out2_sig <- AP_out2[AP_out2$adjusted.p.val < 0.05,]
-  ID_name_sig <- ID_name[AP_out2$adjusted.p.val < 0.05,]
+  AP_out2$adjusted_p_val <-stats::p.adjust(AP_out2$p.val, method = "fdr")
+  AP_out2_sig <- AP_out2[AP_out2$adjusted_p_val < 0.05,]
+  ID_name_sig <- ID_name[AP_out2$adjusted_p_val < 0.05,]
   AP_DEET_DE_output <- list(results=AP_out2_sig,
                             metadata=ID_name_sig)
   

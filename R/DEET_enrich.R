@@ -258,9 +258,9 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
   AP_INPUT_BP <- ActivePathways::ActivePathways(scores = comp,
                                                 gmt = gmt_BP,
                                                 background = background,
-                                                geneset.filter = c(15, 2000),
-                                                merge.method = "Brown",
-                                                correction.method = "fdr",
+                                                geneset_filter = c(15, 2000),
+                                                merge_method = "Brown",
+                                                correction_method = "fdr",
                                                 significant = 1,
                                                 cutoff = 0.05)
   
@@ -292,9 +292,9 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
   AP_INPUT_TF <- ActivePathways::ActivePathways(scores = comp,
                                                 gmt = gmt_TF,
                                                 background = background,
-                                                geneset.filter = c(15, 5000),
-                                                merge.method = "Brown",
-                                                correction.method = "fdr",
+                                                geneset_filter = c(15, 5000),
+                                                merge_method = "Brown",
+                                                correction_method = "fdr",
                                                 significant = 1,
                                                 cutoff = 0.05)
  
@@ -323,9 +323,9 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
   AP_DEET_DE <- ActivePathways::ActivePathways(scores = comp,
                                                gmt = DEET_gmt_DE,
                                                background = background,
-                                               geneset.filter = c(15, 10000),
-                                               merge.method = "Brown",
-                                               correction.method = "fdr",
+                                               geneset_filter = c(15, 10000),
+                                               merge_method = "Brown",
+                                               correction_method = "fdr",
                                                significant = 1,
                                                cutoff = 0.05)
   
@@ -372,9 +372,9 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
 
     AP_DEET_BP <- ActivePathways::ActivePathways(scores = comp_bp,
                                                  gmt = DEET_gmt_BP,
-                                                 geneset.filter = c(15, 10000),
-                                                 merge.method = "Brown",
-                                                 correction.method = "fdr",
+                                                 geneset_filter = c(15, 10000),
+                                                 merge_method = "Brown",
+                                                 correction_method = "fdr",
                                                  significant = 1,
                                                  cutoff = 0.05)
     
@@ -412,9 +412,9 @@ DEET_enrich <- function(DEG_list, DEET_dataset, ordered = FALSE, background = NU
 
     AP_DEET_TF <- ActivePathways::ActivePathways(scores = comp_tf,
                                                  gmt = DEET_gmt_TF,
-                                                 geneset.filter = c(15, 10000),
-                                                 merge.method = "Brown",
-                                                 correction.method = "fdr",
+                                                 geneset_filter = c(15, 10000),
+                                                 merge_method = "Brown",
+                                                 correction_method = "fdr",
                                                  significant = 1,
                                                  cutoff = 0.05)
     if("term.id" %in% colnames(AP_DEET_TF)) {

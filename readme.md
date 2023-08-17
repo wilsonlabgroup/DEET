@@ -3,7 +3,7 @@
 
 ### Dustin Sokolowski: dustin-dot-sokolowski-at-sickkids-dot-ca
 
-### Date: 05/01/2023
+### Date: 08/16/2023
 
 ![alt text](https://github.com/wilsonlabgroup/DEET/blob/master/vignettes/DEET_V2.png?raw=true)
 
@@ -15,6 +15,18 @@ Design by Sarah Watt
 
 *Description of DEET adapted from manuscript*. The primary use of the differential expression enrichment tool (DEET) is to allow researchers to perform gene set enrichment of their own gene list against the thousands of pairwise DE comparisons stored within DEET. Here, users input a list of genes with an associated p-value and summary statistic (i.e. fold-change), and the DEET_enrich() function will output which pairwise comparisons are associated with the inputted gene list at three levels: overlapping genes, pathways, and transcription factor (TF) target genes (see “Materials and Methods” for details). The gene-set enrichment within DEET_enrich() uses ActivePathways to test for significant overlap between gene sets. Unlike traditional pathway enrichment, the gene lists stored within DEET are also weighted by p-value and fold-change. DEET_enrich() leverages the summary statistics stored within DEET by correlating the fold-changes of overlapping DEGs between the researchers' inputted gene list and each of the enriched comparisons within DEET. This correlation analysis provides further evidence that the inputted gene list shares common biological underpinnings with the overlapping gene list because not only is there a significant overlap in DEGs, but those overlapping DEGs are changing in a similar pattern. Simultaneously, DEET_enrich() uses ActivePathways to enrich the researchers inputted gene list against the same biological pathway and transcription factor gene sets performed on all of the pairwise comparisons within DEET. Finally, DEET_enrich() leverages these enriched pathways and transcription factors to identify which comparisons significantly overlap with the researchers' inputted genes based on their shared biological pathways and transcription factors.
 The secondary use of DEET is to interact with the results of the 3142 unique DE comparisons to find commonalities across different experimental designs. Specifically, the DEET_feature_extract() function identifies genes whose p-values drive metadata (e.g., cluster ID, number of DEGs in the study, study source, if TF is enriched etc.). DEET_feature_extract() uses an elastic net regression as well gene associations based on correlation, ANOVA, and Wilcoxon’s test depending on whether the inputted metadata is continuous, categorical, or binomial respectively.
+
+#### ActivePathways note August 2023
+
+ActivePathways has developed a 2.0.0 version, which has changed the format of their input variables. If you see the below error thrown while using `DEET_enrich`, please update ActivePathways and try again.
+
+
+```{r AP_2023, eval=FALSE}
+
+Error in ActivePathways::ActivePathways(scores = comp, gmt = gmt_BP, background = background,  : 
+  unused arguments (geneset.filter = c(15, 2000), merge.method = "Brown", correction.method = "fdr")
+
+```
 
 ### Shiny App
 

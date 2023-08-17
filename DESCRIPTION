@@ -1,6 +1,6 @@
 Package: DEET
 Title: Differential Expression Enrichment Tool 
-Version: 1.0.10
+Version: 1.0.11
 Authors@R: 
   c(person(given = "Dustin",
            family = "Sokolowski",

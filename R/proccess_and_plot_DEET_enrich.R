@@ -84,7 +84,9 @@ proccess_and_plot_DEET_enrich <- function(DEET_output,colour_barplot = "Source",
       if(grepl("AP_INPUT",i)) {
         DEET_list$domain <- domain
         DEET_list$overlap.size <- lengths(DEET_list$overlap)
-        DEET_list$p.value <- DEET_list$adjusted.p.val
+        DEET_list$p.value <- DEET_list$adjusted_p_val
+        DEET_list$term.id <- DEET_list$term_id
+        DEET_list$term.name <- DEET_list$term_name
         DEET_plot_processed[[domain1]] <- DEET_list
       } else {
         DEET_out <- DEET_output[[i]]
@@ -103,10 +105,13 @@ proccess_and_plot_DEET_enrich <- function(DEET_output,colour_barplot = "Source",
         }
 
         DEET_list$term.name <- DEET_out$metadata$DEET.Name
+        DEET_list$term.id <- DEET_out$metadata$DEET.ID
         DEET_list$domain <- domain
         DEET_list$overlap.size <- lengths(DEET_list$overlap)
-        DEET_list$p.value <- DEET_list$adjusted.p.val
+        DEET_list$p.value <- DEET_list$adjusted_p_val
+        #print(head(DEET_list))
         DEET_plot_processed[[domain1]] <- DEET_list
+        
       }
     }
   }
