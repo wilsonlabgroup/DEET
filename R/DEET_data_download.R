@@ -82,7 +82,7 @@ DEET_data_download <- function(x = "enrich") {
     if(i %in% "metadata") {
       datafile <- "DEET_metadata.rda"
       metafile <- paste0(datafile)
-      url <- paste0("http://wilsonlab.org/public/DEET_data/",
+      url <- paste0("http://www.wilsonlab.org/public/DEET_data/",
                     metafile, "?raw=true")
       destfile <- file.path(tempdir(), metafile)
       downloader::download(url, destfile = destfile, mode = "wb")
@@ -92,7 +92,7 @@ DEET_data_download <- function(x = "enrich") {
     if(i %in% "enrich") {
       datafile <- "DEET_combined.rda"
       metafile <- paste0(datafile)
-      url <- paste0("http://wilsonlab.org/public/DEET_data/",
+      url <- paste0("http://www.wilsonlab.org/public/DEET_data/",
                     metafile, "?raw=true")
       destfile <- file.path(tempdir(), metafile)
       downloader::download(url, destfile = destfile, mode = "wb")
@@ -102,7 +102,7 @@ DEET_data_download <- function(x = "enrich") {
     if(i %in% "feature_matrix") {
       datafile <- "DEET_log2FC_matrix.rda"
       metafile <- paste0(datafile)
-      url <- paste0("http://wilsonlab.org/public/DEET_data/",
+      url <- paste0("http://www.wilsonlab.org/public/DEET_data/",
                     metafile, "?raw=true")
       destfile <- file.path(tempdir(), metafile)
       downloader::download(url, destfile = destfile, mode = "wb")
