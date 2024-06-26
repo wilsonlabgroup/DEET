@@ -48,7 +48,7 @@ devtools::install_github("wilsonlabgroup/DEET")
 
 ## Downloading files
 
-All processed DEGs, metadata, and enriched pathways in formats compatible with this package as well as other methods such as gene set enrichment analysis are stored here: http://wilsonlab.org/public/DEET_data/
+All processed DEGs, metadata, and enriched pathways in formats compatible with this package as well as other methods such as gene set enrichment analysis are stored here: http://www.wilsonlab.org/public/DEET_data/
 
 No functions within DEET automatically load data for the user, so the data either needs to be downloaded directly from the ftp, or using the downloader function.
 
@@ -210,7 +210,7 @@ Named list where each element contains 6 objects. Each object will contain the r
 
 * DEET_feature_extract expects three variables: a gene-by-comparison matrix populated with a statistic related to differential expresion (e.g., p-value, fold-change), a response variable (i.e., an output dependent variable), and a category.
 
-* mat - a gene-bycomparison matrix populated with a statistic related to differential expression. The matrix in `DEET_data_download()` is populated with the log2FC of genes if they were deemed as significant (padj < 0.05). Other matrices, namely those populated by p-value, fold-change, and t-statitic (including the matrices for all DEGs) can be found in `http://wilsonlab.org/public/DEET_data/feature_matrices` and can be downloaded separately.
+* mat - a gene-bycomparison matrix populated with a statistic related to differential expression. The matrix in `DEET_data_download()` is populated with the log2FC of genes if they were deemed as significant (padj < 0.05). Other matrices, namely those populated by p-value, fold-change, and t-statitic (including the matrices for all DEGs) can be found in `http://www.wilsonlab.org/public/DEET_data/feature_matrices` and can be downloaded separately.
 * respeonse: a character vector identifying each study, this can be categorical, binomial (e.g. 0/1, T/F), or continuous
 * datatype: a character indicating if the response is "binomial", "categorical", or "continuous". This is case sensitive.
 
@@ -335,7 +335,7 @@ As mentioned previously, the genesets within DEET are easily transferrable to ot
 
 #### Saving DEET gene set for GSEA, gprofiler, etc.
 
-One option is to download the *gmt files diretly from our ftp. `http://wilsonlab.org/public/DEET_data/DEET_DE.gmt` Is directly compatible with these tools.
+One option is to download the *gmt files diretly from our ftp. `http://www.wilsonlab.org/public/DEET_data/DEET_DE.gmt` Is directly compatible with these tools.
 
 The other option would be to save the downloaded DEET gmt as a gmt file. This is completed using the ActivePathways R package. Instead of using the example data as shown below, please use the full dataset.
 
